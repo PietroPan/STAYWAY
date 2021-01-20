@@ -5,7 +5,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
 public class Users {
-    Map<String, User> users;
+    Map<String, User> users;//Map de utilizadores do sistema
     ReentrantReadWriteLock lock;
 
     public Users(){
@@ -38,11 +38,11 @@ public class Users {
         lock.writeLock().unlock();
     }
 
-    public void updateUsers(String name, Location loc){
+    public void updateUsers(String name, Location loc){//Update das lista de potenciais infetados qnd alguem muda de lugar
         lock.writeLock().lock();
         Set<String> r = this.users.entrySet().stream().filter(i->i.getValue().getCurrentLocation().equals(loc)&& !i.getValue().getName().equals(name)).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)).keySet();
-        users.get(name).addContacts(r);
-        for (String i : r){
+        users.get(name).addContacts(r);//Adiciona pessoas na nova area aos potenciais infetados
+        for (String i : r){//Adiciona-se a si próprio á lista de potenciais infetados de pessoas na área
             users.get(i).addContact(name);
         }
         lock.writeLock().unlock();

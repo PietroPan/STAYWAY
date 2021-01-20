@@ -9,8 +9,8 @@ public class User {
     private boolean isInfected;
     private boolean isVip;
     private Location currentLocation;
-    private Set<String> contacts;
-    private Set<Location> locations;
+    private Set<String> contacts;//Set com pessoas potencialmente infetadas
+    private Set<Location> locations;//Set com localizacoes onde esta pessoa esteve
 
     public User(String name, String pass, Location loc){
         this.name=name;

@@ -9,9 +9,9 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class LocationsMap {
-    private MapLocation[][] map;
-    private Map<Integer,Condition> conds;
-    private Map<String,Condition> condsInf;
+    private MapLocation[][] map; //Mapa 10 por 10
+    private Map<Integer,Condition> conds; //Map de Condition para cada lugar no mapa (serve para avisar quando esta estiver vazia)
+    private Map<String,Condition> condsInf; //Map de Condition para cada Pessoa (serve para avisar pessoas que estiveram com infetado)
     private ReentrantReadWriteLock lock;
 
     public LocationsMap(){
@@ -26,14 +26,14 @@ public class LocationsMap {
         lock=new ReentrantReadWriteLock();
     }
 
-    public void updateLocations(Location oldL, Location newL){
+    public void updateLocations(Location oldL, Location newL){//Update localizacao de pessoa já existente
         lock.writeLock().lock();
             MapLocation newML = map[newL.getX()][newL.getY()];
             newML.addTotal();
             newML.addCurrent();
             MapLocation oldML = map[oldL.getX()][oldL.getY()];
             oldML.removeCurrent();
-            if (oldML.getCurrentPeople()==0) {
+            if (oldML.getCurrentPeople()==0) { //se novo location tiver 0 pessoas avisa todos os threads á espera nessa location
                 if (conds.containsKey((oldML.getX() * 10) + oldML.getY())) conds.get((oldML.getX() * 10) + oldML.getY()).signalAll();
             }
         lock.writeLock().unlock();
@@ -48,7 +48,7 @@ public class LocationsMap {
         }
     }
 
-    public void updateLocationsR(Location l){
+    public void updateLocationsR(Location l){//Update Localizacao quando é feito um novo registo
         lock.writeLock().lock();
             MapLocation newML = map[l.getX()][l.getY()];
             newML.addTotal();
@@ -56,21 +56,21 @@ public class LocationsMap {
         lock.writeLock().unlock();
     }
 
-    public void updateInfected(Set<Location> locations){
+    public void updateInfected(Set<Location> locations){//Adicionar potenciais infetados
         lock.writeLock().lock();
             for (Location i : locations) map[i.getX()][i.getY()].addInfected();
         lock.writeLock().unlock();
     }
 
-    public void waitForLocation(Location loc, DataOutputStream out){
+    public void waitForLocation(Location loc, DataOutputStream out){//Esperar que location fique vazia
         new Thread(() -> {
             try {
                 this.lock.writeLock().lock();
-                int key = (loc.getX()*10)+loc.getY();
+                int key = (loc.getX()*10)+loc.getY();//chave unica para cada localizacao
                 if (conds.containsKey(key)) conds.get(key).await();
                 else {
                     conds.put(key, this.lock.writeLock().newCondition());
-                    conds.get(key).await();
+                    conds.get(key).await();//espera que fique vazia (updateLocations)
                 }
                 out.writeInt(3);
                 out.writeInt(loc.getX());
@@ -81,7 +81,7 @@ public class LocationsMap {
         }).start();
     }
 
-    public void waitInfected(String name, DataOutputStream out){
+    public void waitInfected(String name, DataOutputStream out){//Espera até estar potencialmente infetado
         new Thread(()->{
             try {
                 condsInf.put(name,lock.writeLock().newCondition());
@@ -97,13 +97,13 @@ public class LocationsMap {
         }).start();
     }
 
-    public void wakeInfected(Set<String> users){
+    public void wakeInfected(Set<String> users){//Acorda todos os potencialmente infetados
         this.lock.writeLock().lock();
             for (String i : users) condsInf.get(i).signalAll();
         this.lock.writeLock().unlock();
     }
 
-    public boolean isAlreadyZero(Location loc){
+    public boolean isAlreadyZero(Location loc){//Não fica a espera que loc fique vazia
         lock.readLock().lock();
         try {
             return (map[loc.getX()][loc.getY()].getCurrentPeople() == 0);
@@ -112,7 +112,7 @@ public class LocationsMap {
         }
     }
 
-    public void readMap(DataOutputStream out) throws IOException {
+    public void readMap(DataOutputStream out) throws IOException {//Manda toda a informação do map para client
         lock.writeLock().lock();
         for (int i=0;i<10;i++){
             for (int j=0;j<10;j++){

@@ -3,7 +3,7 @@ package Client;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Client2 {
+public class Client2 {//Testing
 
     public static void main(String[] args) throws Exception {
         Scanner in = new Scanner(System.in);

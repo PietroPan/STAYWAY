@@ -21,7 +21,7 @@ public class SACovidStub {
     public void login(String name, String pass) throws IOException, InterruptedException {
             try {
                 lock.lock();
-                out.writeUTF("login");
+                out.writeUTF("login");//Pedido com tag login
                 out.writeUTF(name);
                 out.writeUTF(pass);
                 out.flush();
@@ -32,7 +32,7 @@ public class SACovidStub {
     public void register(String name,String pass) throws IOException, InterruptedException {
             try {
                 lock.lock();
-                out.writeUTF("register");
+                out.writeUTF("register");//Pedido com tag register
                 out.writeUTF(name);
                 out.writeUTF(pass);
                 out.flush();
@@ -43,7 +43,7 @@ public class SACovidStub {
     public void setLocation(int x,int y) throws IOException, InterruptedException {
             try {
                 lock.lock();
-                out.writeUTF("setLocation");
+                out.writeUTF("setLocation");//Pedido com tag setLocation
                 out.writeUTF(this.name);
                 out.writeInt(x);
                 out.writeInt(y);
@@ -55,7 +55,7 @@ public class SACovidStub {
     public void getNUsersLoc(int x,int y) throws IOException, InterruptedException {
             try {
                 lock.lock();
-                out.writeUTF("getNUsersLoc");
+                out.writeUTF("getNUsersLoc");//Pedido com tag getNUsersLoc
                 out.writeInt(x);
                 out.writeInt(y);
                 out.flush();
@@ -66,7 +66,7 @@ public class SACovidStub {
     public void waitLocation(int x,int y){
             try {
                 lock.lock();
-                out.writeUTF("waitLocation");
+                out.writeUTF("waitLocation");//Pedido com tag waitLocation
                 out.writeInt(x);
                 out.writeInt(y);
                 out.flush();
@@ -77,7 +77,7 @@ public class SACovidStub {
     public void isInfected(){
             try {
                 lock.lock();
-                out.writeUTF("isInfected");
+                out.writeUTF("isInfected");//Pedido com tag isInfected
                 out.writeUTF(this.name);
                 out.flush();
                 lock.unlock();
@@ -87,40 +87,40 @@ public class SACovidStub {
     public void showMap(){
             try {
                 lock.lock();
-                out.writeUTF("showMap");
+                out.writeUTF("showMap");//Pedido com tag showMap
                 out.writeUTF(this.name);
                 out.flush();
                 lock.unlock();
             }catch (IOException e) {}
     }
 
-    public void readReplies(){
+    public void readReplies(){//Thread ativo para ler replies
         new Thread(() -> {
             try {
                 while (true) {
                     switch (in.readInt()) {
-                        case 0:
+                        case 0://Resposta recebida com tag 0
                             if (in.readBoolean()) {
                                 this.name = (in.readUTF());
                                 System.out.println("Welcome " + this.name);
                             } else System.out.println("Name or Password are incorrect");
                             break;
-                        case 1:
+                        case 1://Resposta recebida com tag 1
                             if (in.readBoolean()) {
                                 this.name = (in.readUTF());
                                 System.out.println("Welcome " + this.name);
                             } else System.out.println("Name is already in use");
                             break;
-                        case 2:
+                        case 2://Resposta recebida com tag 2
                             System.out.println("Há " + in.readInt() + " pessoas na localização indicada");
                             break;
-                        case 3:
+                        case 3://Resposta recebida com tag 3
                             System.out.println("Location ("+in.readInt()+","+in.readInt()+") is available!!");
                             break;
-                        case 4:
+                        case 4://Resposta recebida com tag 4
                             System.out.println("Someone you've been with has been infected!!!");
                             break;
-                        case 5:
+                        case 5://Resposta recebida com tag 5
                             if (!in.readBoolean()) System.out.println("You don't have permission");
                             else {
                                 for (int i=0;i<10;i++){

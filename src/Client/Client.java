@@ -8,9 +8,10 @@ public class Client {
     public static void main(String[] args) throws Exception {
         Scanner in = new Scanner(System.in);
         Socket s = new Socket("localhost", 12345);
-        SACovidStub SACS = new SACovidStub(s);
+        SACovidStub SACS = new SACovidStub(s);//Cliente
         SACS.readReplies();
 
+        //Menu de bosta
         String inS1;
         String inS2;
         int inOpt;
