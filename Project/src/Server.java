@@ -16,7 +16,8 @@ public class Server {
 
         while (true){
             Socket s = SS.accept();
-            ServerSession SS = new ServerSession(s,SI);
+            //CRIAR TAGGED CONNECTION
+            ServerSession SS = new ServerSession(s,SI);//FALTA PASSAR A TAGGED CONNECTION COMO PARAMETRO
             for (int i = 0; i<NWorkers; i++)
                 new Thread(SS).start();
         }

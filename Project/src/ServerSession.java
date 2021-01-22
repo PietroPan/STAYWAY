@@ -9,6 +9,7 @@ public class ServerSession implements Runnable{
     private DataInputStream in;
     private DataOutputStream out;
     private String name;
+    //FALTA CLASSE TAGGED CONNECTION
 
     public ServerSession(Socket s, SystemInfo SI) throws IOException {
         this.s=s;
