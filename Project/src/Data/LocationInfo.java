@@ -61,6 +61,8 @@ public class LocationInfo extends Location {
         this.currentPeople--;
     }
 
+    public boolean isEmpty() { return this.currentPeople==0;}
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
