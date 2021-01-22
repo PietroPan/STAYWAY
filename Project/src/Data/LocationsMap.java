@@ -13,8 +13,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class LocationsMap {
     private LocationInfo[][] map; //Mapa 10 por 10
-    private Map<Integer, Condition> conds; //Map de Condition para cada lugar no mapa (serve para avisar quando esta estiver vazia)
-    //private Map<String,Condition> condsInf; //Map de Condition para cada Pessoa (serve para avisar pessoas que estiveram com infetado)
+    //private Map<Integer, Condition> conds; //Map de Condition para cada lugar no mapa (serve para avisar quando esta estiver vazia)
+    private Map<String,Condition> condsInf; //Map de Condition para cada Pessoa (serve para avisar pessoas que estiveram com infetado)
     private ReentrantReadWriteLock lock;
     private Condition waitLocation;
 
@@ -25,7 +25,7 @@ public class LocationsMap {
                 map[i][j]=new LocationInfo(i,j);
             }
         }
-        conds = new HashMap<>();
+        //conds = new HashMap<>();
         condsInf = new HashMap<>();
         lock=new ReentrantReadWriteLock();
         waitLocation = lock.writeLock().newCondition();
@@ -99,6 +99,11 @@ public class LocationsMap {
                 e.printStackTrace();
             }
         }).start();
+        /* NOTE
+        Varios threads podem esperar pela mesma loc
+        Sol: Cliente tem lista de loc que esta a espera
+        Prob: while tem de verificar o estado de todas as loc da list e potencialmente enviar varias respostas
+         */
     }
 
     public void waitInfected(String name, DataOutputStream out){//Espera até estar potencialmente infetado
