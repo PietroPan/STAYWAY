@@ -27,7 +27,7 @@ public class Demultiplexer implements AutoCloseable {
     public Demultiplexer() throws Exception {
         this.connection = new TaggedConnection();
         this.lock = new ReentrantLock();
-        entradas = new HashMap<>();
+        this.entradas = new HashMap<>();
     }
 
 

@@ -11,15 +11,6 @@ public class ClientModel {
         dm = new Demultiplexer();
         dm.start();
     }
-/*
-    public Response login(String username, String password) throws Exception {
-        p.login(username, password);
-    }
-
-    while (opcao != 0) {
-        switch ()
-
-    } */
 
     //////////////////////////// Pedidos Cliente //////////////////////////////
 
@@ -35,7 +26,6 @@ public class ClientModel {
     }
 
     public void numeroPessoasLocalizacao(int x, int y) {
-
         new Thread(() -> {
             try  {
                 dm.nrPessoasLocalizacao(x, y);

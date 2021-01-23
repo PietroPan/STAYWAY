@@ -128,9 +128,9 @@ public class TaggedConnection implements AutoCloseable {
         lock.lock();
         try {
             switch (in.readInt()) {
-                case 1:
+                case 4:
                     byte[] data = String.valueOf(in.readInt()).getBytes();
-                    frameRecebida = new Frame(1, data);
+                    frameRecebida = new Frame(4, data);
                     break;
 
                 default:
