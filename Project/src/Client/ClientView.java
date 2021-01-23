@@ -34,4 +34,13 @@ public class ClientView {
     public void printException(Exception e) {
         System.out.println(e.getMessage());
     }
+
+    public void numeroPessoasLocalizacao() {
+        System.out.println("1º - Coordenada x");
+        System.out.println("2º - Coordenada y");
+    }
+
+    public void loginInvalido() {
+        System.out.println("Erro no login");
+    }
 }

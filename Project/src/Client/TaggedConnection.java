@@ -1,3 +1,5 @@
+package Client;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.concurrent.locks.ReentrantLock;
@@ -11,9 +13,9 @@ public class TaggedConnection implements AutoCloseable {
 
     public static class Frame {
         public final int tag;
-        public final Response data;
+        public final byte[] data;
 
-        public Frame(int tag, Response data) {
+        public Frame(int tag, byte[] data) {
             this.tag = tag;
             this.data = data;
         }
@@ -29,7 +31,7 @@ public class TaggedConnection implements AutoCloseable {
     public void login(String name, String pass) throws IOException, InterruptedException {
         lock.lock();
         try {
-            out.writeInt(1);//Pedido com tag login
+            out.writeInt(0);//Pedido com tag login
             out.writeUTF(name);
             out.writeUTF(pass);
             out.flush();
@@ -121,24 +123,20 @@ public class TaggedConnection implements AutoCloseable {
 
 
     public Frame receive() throws IOException {
-        int tagRecebida;
-        Response response;
         Frame frameRecebida;
 
         lock.lock();
         try {
             switch (in.readInt()) {
-                case 0:
-                    if (in.readBoolean()) {
-                        response = new ResponseLogin(true, in.readUTF());
-                    }
-                    else {
-                        response = new ResponseLogin(false, null);
-                    }
-                    frameRecebida = new Frame(0, response);
+                case 1:
+                    byte[] data = String.valueOf(in.readInt()).getBytes();
+                    frameRecebida = new Frame(1, data);
                     break;
 
-                    //...
+                default:
+                    frameRecebida = null;
+                    break;
+
 
             }
             return frameRecebida;
@@ -187,4 +185,7 @@ public class TaggedConnection implements AutoCloseable {
             } catch (IOException e){}
         }).start();
     } */
+    public void close() throws IOException {
+        socket.close();
+    }
 }

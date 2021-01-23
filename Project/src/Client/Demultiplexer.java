@@ -11,11 +11,11 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Demultiplexer implements AutoCloseable {
     private TaggedConnection connection;
-    private ReentrantLock lock = new ReentrantLock(); // Porque temos que ter controlo de concorrência no acesso ao map
-    private Map<Integer, Entry> entradas = new HashMap<>();
+    private ReentrantLock lock; // Porque temos que ter controlo de concorrência no acesso ao map
+    private Map<Integer, Entry> entradas;
 
     public class Entry {
-        Queue<Response> queue;
+        Queue<byte[]> queue;
         Condition c;
 
         Entry() {
@@ -26,6 +26,8 @@ public class Demultiplexer implements AutoCloseable {
 
     public Demultiplexer() throws Exception {
         this.connection = new TaggedConnection();
+        this.lock = new ReentrantLock();
+        entradas = new HashMap<>();
     }
 
 
@@ -33,7 +35,7 @@ public class Demultiplexer implements AutoCloseable {
         new Thread(() -> {
             TaggedConnection.Frame f;
             int tag;
-            Response data;
+            byte[] data;
             boolean b = true;
             while(b) {
                 try {
@@ -65,8 +67,8 @@ public class Demultiplexer implements AutoCloseable {
     }
 
 
-    public Response receive(int tag) throws IOException, InterruptedException {
-        Response res;
+    public byte[] receive(int tag) throws IOException, InterruptedException {
+        byte[] res;
 
         lock.lock();
         try {
@@ -87,8 +89,18 @@ public class Demultiplexer implements AutoCloseable {
         return res;
     }
 
-    public void close() throws IOException {
+    public void close() throws Exception {
         connection.close();
+    }
+
+    ///////////////////////////////////////////// Envio de Requests ////////////////////////////////////////////////////
+
+    public void login(String username, String password) throws Exception {
+        connection.login(username, password);
+    }
+
+    public void nrPessoasLocalizacao(int x, int y) throws Exception { // ver quando é a melhor altura para tratar estas exceções
+        connection.getNUsersLoc(x, y);
     }
 
 }

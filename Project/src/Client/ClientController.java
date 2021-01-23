@@ -3,12 +3,10 @@ package Client;
 import java.util.Scanner;
 
 public class ClientController {
-    private final int nrTiposPedidos = 5;
-    private boolean[] availableRequests = new boolean[nrTiposPedidos];
-
-    private Scanner in = new Scanner(System.in);
     private ClientView view;
     private ClientModel model;
+    private Scanner in = new Scanner(System.in);
+
 
     public void menuInicial() {
         int opcao = 10;
@@ -23,7 +21,7 @@ public class ClientController {
                     break;
 
                 case 2:
-                    this.registerCliente();
+                    //this.registoCliente();
                     break;
 
                 case 0:
@@ -40,13 +38,19 @@ public class ClientController {
 
     public void loginCliente() {
         String username, password;
+        boolean success;
 
         this.view.loginCliente();
         username = in.nextLine();
         password = in.nextLine();
 
-        ResponseLogin r = model.login(username, password);
-        if (r.getBool()) {
+        try {
+            success = model.login(username, password);
+        } catch (Exception e) {
+            success = false;
+        }
+
+        if (success) {
             menuPrincipal();
         } else {
             this.view.loginInvalido();
@@ -62,23 +66,12 @@ public class ClientController {
             opcao = in.nextInt();
 
             switch (opcao) {
-                case 1:
-                    //this.loginCliente();
-                    break;
 
                 case 2: // número de pessoas numa localização
                     this.view.numeroPessoasLocalizacao();
                     int x = this.in.nextInt();
                     int y = this.in.nextInt();
-
-                    new Thread(() -> {
-                        try  {
-                            // send request
-                            ResponsePos r = model.login(username, password);
-                        }
-                        catch (Exception ignored)
-                        {}
-                    }).start();
+                    this.model.numeroPessoasLocalizacao(x, y);
                     break;
 
                 case 0:
