@@ -17,11 +17,9 @@ public class ClientModel {
     public boolean login(String username, String password) throws Exception { // ver onde se lida com estas exceptions
         boolean success = false;
         dm.login(username, password);
-        byte[] data = dm.receive(0);
-        if ((new String(data)).equals("true")) {
-            success = true;
-        }
+        ResponseBool data = (ResponseBool) dm.receive(0);
 
+        success = data.getBool();
         return success;
     }
 
@@ -30,8 +28,8 @@ public class ClientModel {
             try  {
                 dm.nrPessoasLocalizacao(x, y);
                 Thread.sleep(100);
-                byte[] data = dm.receive(4);
-                System.out.println("Número de pessoas em (" + x + "," + y + "): " + new String(data));
+                ResponseInt data = (ResponseInt) dm.receive(4);
+                System.out.println("Número de pessoas em (" + x + "," + y + "): " + data.getInt());
             }
             catch (Exception ignored)
             {}

@@ -15,7 +15,7 @@ public class Demultiplexer implements AutoCloseable {
     private Map<Integer, Entry> entradas;
 
     public class Entry {
-        Queue<byte[]> queue;
+        Queue<Response> queue;
         Condition c;
 
         Entry() {
@@ -33,22 +33,21 @@ public class Demultiplexer implements AutoCloseable {
 
     public void start() {
         new Thread(() -> {
-            TaggedConnection.Frame f;
+            Response r;
             int tag;
-            byte[] data;
             boolean b = true;
+
             while(b) {
                 try {
-                    f = connection.receive();
-                    tag = f.tag;
-                    data = f.data;
+                    r = connection.receive();
+                    tag = r.getTag();
 
                     lock.lock();
                     try {
                         if (!entradas.containsKey(tag)) {
                             entradas.put(tag, new Entry());
                         }
-                        entradas.get(tag).queue.add(data);
+                        entradas.get(tag).queue.add(r);
                         entradas.get(tag).c.signal();
                     }
 
@@ -67,8 +66,8 @@ public class Demultiplexer implements AutoCloseable {
     }
 
 
-    public byte[] receive(int tag) throws IOException, InterruptedException {
-        byte[] res;
+    public Response receive(int tag) throws IOException, InterruptedException {
+        Response res;
 
         lock.lock();
         try {

@@ -11,16 +11,6 @@ public class TaggedConnection implements AutoCloseable {
     private DataInputStream in;
     private String name;
 
-    public static class Frame {
-        public final int tag;
-        public final byte[] data;
-
-        public Frame(int tag, byte[] data) {
-            this.tag = tag;
-            this.data = data;
-        }
-    }
-
     public TaggedConnection() throws IOException {
         this.socket = new Socket("localhost", 12345);
         this.lock = new ReentrantLock();
@@ -122,24 +112,22 @@ public class TaggedConnection implements AutoCloseable {
     }
 
 
-    public Frame receive() throws IOException {
-        Frame frameRecebida;
+    public Response receive() throws IOException {
+        Response res = null;
 
         lock.lock();
         try {
             switch (in.readInt()) {
                 case 4:
-                    byte[] data = String.valueOf(in.readInt()).getBytes();
-                    frameRecebida = new Frame(4, data);
+                    res = new ResponseInt(4, in.readInt());
                     break;
 
                 default:
-                    frameRecebida = null;
                     break;
 
 
             }
-            return frameRecebida;
+            return res;
         }
         finally {
             lock.unlock();
