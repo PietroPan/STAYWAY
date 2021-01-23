@@ -1,8 +1,5 @@
-package Client;
-
-import java.net.Socket;
-import java.util.Arrays;
-
+import Client.ResponseBool;
+import Client.ResponseInt;
 
 public class ClientModel {
     Demultiplexer dm;
