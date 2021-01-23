@@ -94,12 +94,32 @@ public class Demultiplexer implements AutoCloseable {
 
     ///////////////////////////////////////////// Envio de Requests ////////////////////////////////////////////////////
 
-    public void login(String username, String password) throws Exception {
+    public void login(String username, String password) {
         connection.login(username, password);
     }
 
-    public void nrPessoasLocalizacao(int x, int y) throws Exception { // ver quando é a melhor altura para tratar estas exceções
+    public void register(String username, String password) {
+        connection.register(username, password);
+    }
+
+    public void setLocation(int x, int y) {
+        connection.setLocation(x, y);
+    }
+
+    public void nrPessoasLocalizacao(int x, int y) {
         connection.getNUsersLoc(x, y);
+    }
+
+    public void waitLocation(int x, int y) {
+        connection.waitLocation(x, y);
+    }
+
+    public void isInfected() {
+        connection.isInfected();
+    }
+
+    public void showMap() {
+        connection.showMap();
     }
 
 }

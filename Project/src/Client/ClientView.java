@@ -21,9 +21,9 @@ public class ClientView {
         System.out.println("1-Atualizar Posição");
         System.out.println("2-Número de pessoas numa localização");
         System.out.println("3-Informar sobre localização vazia");
-        System.out.println("4-Informar contagio");
+        System.out.println("4-Informar contágio");
         System.out.println("5-Descarregar mapa");
-        System.out.println("6-Lista De Comandos");
+        System.out.println("6-Lista de Comandos");
         System.out.println("0-Log Out");
     }
 
@@ -35,12 +35,12 @@ public class ClientView {
         System.out.println(e.getMessage());
     }
 
-    public void numeroPessoasLocalizacao() {
+    public void indicarLocalizacao() {
         System.out.println("1º - Coordenada x");
         System.out.println("2º - Coordenada y");
     }
 
-    public void loginInvalido() {
-        System.out.println("Erro no login");
+    public void printMessage (String message) {
+        System.out.println(message);
     }
 }

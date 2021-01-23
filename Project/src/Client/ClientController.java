@@ -1,5 +1,6 @@
 package Client;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class ClientController {
@@ -21,7 +22,7 @@ public class ClientController {
                     break;
 
                 case 2:
-                    //this.registoCliente();
+                    this.registoCliente();
                     break;
 
                 case 0:
@@ -38,40 +39,76 @@ public class ClientController {
 
     public void loginCliente() {
         String username, password;
-        boolean success;
 
         this.view.loginCliente();
         username = in.nextLine();
         password = in.nextLine();
 
         try {
-            success = model.login(username, password);
-        } catch (Exception e) {
-            success = false;
-        }
-
-        if (success) {
+            model.login(username, password);
+            this.model.someoneWasInfected();
             menuPrincipal();
-        } else {
-            this.view.loginInvalido();
+
+        } catch (Exception e) {
+            this.view.printException(e);
+
         }
 
     }
 
+    public void registoCliente() {
+        String username, password;
+
+        this.view.registoCliente();
+        username = in.nextLine();
+        password = in.nextLine();
+
+        try {
+            model.register(username, password);
+            this.model.someoneWasInfected();
+            menuPrincipal();
+
+        } catch (Exception e) {
+            this.view.printException(e);
+        }
+
+    }
+
+
     public void menuPrincipal() {
         int opcao = 10;
+        int x,y;
 
-        while (opcao != 0) {
+        while (opcao != 0 && opcao != 4) {
             this.view.menuCliente();
             opcao = in.nextInt();
 
             switch (opcao) {
+                case 1:
+                    this.view.indicarLocalizacao();
+                    x = this.in.nextInt();
+                    y = this.in.nextInt();
+                    this.model.setLocalizacao(x, y);
+                    break;
 
                 case 2: // número de pessoas numa localização
-                    this.view.numeroPessoasLocalizacao();
-                    int x = this.in.nextInt();
-                    int y = this.in.nextInt();
+                    this.view.indicarLocalizacao();
+                    x = this.in.nextInt();
+                    y = this.in.nextInt();
                     this.model.numeroPessoasLocalizacao(x, y);
+                    break;
+
+                case 3:
+                    // ??
+                    break;
+
+                case 4:
+                    this.view.printMessage("O sitema foi informado.");
+                    this.model.isInfected();
+                    break;
+
+                case 5:
+                    this.model.showMap();
                     break;
 
                 case 0:

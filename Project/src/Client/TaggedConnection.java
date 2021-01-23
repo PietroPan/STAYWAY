@@ -18,10 +18,10 @@ public class TaggedConnection implements AutoCloseable {
         this.out = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
     }
 
-    public void login(String name, String pass) throws IOException, InterruptedException {
+    public void login(String name, String pass) {
         lock.lock();
         try {
-            out.writeInt(0);//Pedido com tag login
+            out.writeInt(0); //Pedido com tag login
             out.writeUTF(name);
             out.writeUTF(pass);
             out.flush();
@@ -34,10 +34,10 @@ public class TaggedConnection implements AutoCloseable {
         }
     }
 
-    public void register(String name,String pass) throws IOException, InterruptedException {
+    public void register(String name,String pass) {
         try {
             lock.lock();
-            out.writeInt(2);//Pedido com tag register
+            out.writeInt(1); //Pedido com tag register
             out.writeUTF(name);
             out.writeUTF(pass);
             out.flush();
@@ -47,10 +47,10 @@ public class TaggedConnection implements AutoCloseable {
         }
     }
 
-    public void setLocation(int x,int y) throws IOException, InterruptedException {
+    public void setLocation(int x,int y) {
         try {
             lock.lock();
-            out.writeInt(3);//Pedido com tag setLocation
+            out.writeInt(2);//Pedido com tag setLocation
             out.writeUTF(this.name);
             out.writeInt(x);
             out.writeInt(y);
@@ -61,10 +61,10 @@ public class TaggedConnection implements AutoCloseable {
         }
     }
 
-    public void getNUsersLoc(int x,int y) throws IOException, InterruptedException {
+    public void getNUsersLoc(int x,int y) {
         try {
             lock.lock();
-            out.writeInt(4);//Pedido com tag getNUsersLoc
+            out.writeInt(3);//Pedido com tag getNUsersLoc
             out.writeInt(x);
             out.writeInt(y);
             out.flush();
@@ -77,7 +77,7 @@ public class TaggedConnection implements AutoCloseable {
     public void waitLocation(int x,int y){
         try {
             lock.lock();
-            out.writeInt(5);//Pedido com tag waitLocation
+            out.writeInt(4);//Pedido com tag waitLocation
             out.writeInt(x);
             out.writeInt(y);
             out.flush();
@@ -90,7 +90,7 @@ public class TaggedConnection implements AutoCloseable {
     public void isInfected(){
         try {
             lock.lock();
-            out.writeInt(6);//Pedido com tag isInfected
+            out.writeInt(5);//Pedido com tag isInfected
             out.writeUTF(this.name);
             out.flush();
         }catch (IOException e) {}
@@ -102,7 +102,7 @@ public class TaggedConnection implements AutoCloseable {
     public void showMap(){
         try {
             lock.lock();
-            out.writeInt(7);//Pedido com tag showMap
+            out.writeInt(6);//Pedido com tag showMap
             out.writeUTF(this.name);
             out.flush();
         } catch (IOException e) {}
@@ -118,8 +118,32 @@ public class TaggedConnection implements AutoCloseable {
         lock.lock();
         try {
             switch (in.readInt()) {
-                case 4:
-                    res = new ResponseInt(4, in.readInt());
+                case 0:   // Login
+                    res = new ResponseBool(0, in.readBoolean());
+                    break;
+                case 1:   //Register
+                    res = new ResponseBool(1, in.readBoolean());
+                    break;
+                case 2:   //People at location
+                    res = new ResponseInt(2, in.readInt());
+                    break;
+                case 3:   //Location available
+                    res = new ResponsePair(3,in.readInt(), in.readInt());
+                    break;
+                case 4:   //Infected
+                    res = new ResponseString(4, "Esteve com alguém infetado!!");
+                    break;
+                case 5:   //Map
+                    if (in.readBoolean()) {
+                        int [][][] matrix = new int [2][10][10];
+                        for (int i=0;i<10;i++){
+                            for (int j=0;j<10;j++){
+                                matrix[0][i][j] = in.readInt();
+                                matrix[1][i][j] = in.readInt();
+                            }
+                        }
+                        res = new ResponseIntMatrix(5, matrix);
+                    }
                     break;
 
                 default:
