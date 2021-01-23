@@ -1,25 +1,40 @@
+import Client.Response;
 import Data.SystemInfo;
 
 import java.io.*;
 import java.net.Socket;
 
 public class ServerSession implements Runnable{
-    private Socket s;
+    private final TaggedConnection connection; // hmmm deixar o final ou mudar o try-with-resources
     private SystemInfo SI;
-    private DataInputStream in;
-    private DataOutputStream out;
     private String name;
-    //FALTA CLASSE TAGGED CONNECTION
 
     public ServerSession(Socket s, SystemInfo SI) throws IOException {
-        this.s=s;
+        this.connection = new TaggedConnection(s);
         this.SI=SI;
-        this.in=new DataInputStream(new BufferedInputStream(s.getInputStream()));
-        this.out=new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
     }
+
+    public ServerSession(TaggedConnection tc, SystemInfo SI) throws IOException {
+        this.connection = tc;
+        this.SI=SI;
+    }
+
+
 
     @Override
     public void run() {
-        //Client.Demultiplexer Parte do Servidor
+        //Demultiplexer Parte do Servidor
+        try (this.connection) {
+            while (true) {
+                Response res = connection.receive();
+                int tag = res.getTag();
+
+                switch(tag) {
+                    case 0:
+                        //...
+                        
+                }
+            }
+        } catch (Exception ignored) { }
     }
 }

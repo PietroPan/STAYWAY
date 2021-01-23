@@ -1,7 +1,6 @@
-package Client;
+import Client.Response;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;

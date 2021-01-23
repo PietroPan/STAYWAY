@@ -1,4 +1,4 @@
-package Client;
+import Client.ClientView;
 
 import java.io.IOException;
 import java.util.Scanner;

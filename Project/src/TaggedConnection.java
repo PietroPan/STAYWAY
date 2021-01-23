@@ -1,4 +1,5 @@
-package Client;
+import Client.Response;
+import Client.ResponseInt;
 
 import java.io.*;
 import java.net.Socket;
@@ -18,7 +19,14 @@ public class TaggedConnection implements AutoCloseable {
         this.out = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
     }
 
-    public void login(String name, String pass) {
+    public TaggedConnection(Socket s) throws IOException {
+        this.socket = s;
+        this.lock = new ReentrantLock();
+        this.in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+        this.out = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+    }
+
+    public void login(String name, String pass) throws IOException, InterruptedException {
         lock.lock();
         try {
             out.writeInt(0); //Pedido com tag login
