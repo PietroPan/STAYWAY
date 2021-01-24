@@ -5,16 +5,12 @@ import java.net.Socket;
 
 public class TaggedConnectionServer extends TaggedConnection {
 
-    public TaggedConnectionServer() throws IOException {
-        super();
-    }
-
     public TaggedConnectionServer(Socket s) throws IOException {
         super(s);
     }
 
     public void loginReply(boolean bool) {
-        lock.lock();
+        writeLock.lock();
         try {
             out.writeInt(0);
             out.writeBoolean(bool);
@@ -24,7 +20,7 @@ public class TaggedConnectionServer extends TaggedConnection {
             // caso algo corra mal
         }
         finally {
-            lock.unlock();
+            writeLock.unlock();
         }
     }
 
@@ -32,12 +28,15 @@ public class TaggedConnectionServer extends TaggedConnection {
         System.out.println("vou respinder");
         lock.lock();
         try {
+
+            writeLock.lock();
+
             out.writeInt(1);
             out.writeBoolean(bool);
             out.flush();
         } catch (IOException e) {}
         finally {
-            lock.unlock();
+            writeLock.unlock();
         }
     }
 
@@ -48,59 +47,63 @@ public class TaggedConnectionServer extends TaggedConnection {
 
     public void sendNUsersLoc(int res) {
         try {
-            lock.lock();
+            writeLock.lock();
             out.writeInt(3);//Pedido com tag getNUsersLoc
             out.writeInt(res);
             out.flush();
         } catch (IOException e) {}
         finally {
-            lock.unlock();
+            writeLock.unlock();
         }
     }
 
     //
     public void locationAvailable(int x,int y){
         try {
-            lock.lock();
+            writeLock.lock();
             out.writeInt(4);//Pedido com tag waitLocation
             out.writeInt(x);
             out.writeInt(y);
             out.flush();
         } catch (IOException e) {}
         finally {
-            lock.unlock();
+            writeLock.unlock();
         }
     }
 
     public void warningIsInfected(){
         try {
-            lock.lock();
+            writeLock.lock();
             out.writeInt(5);//Pedido com tag isInfected
             out.writeUTF(this.name);
             out.flush();
         }catch (IOException e) {}
         finally {
-            lock.unlock();
+            writeLock.unlock();
         }
     }
 
     public void showMap(){
         try {
-            lock.lock();
+            writeLock.lock();
             out.writeInt(6);//Pedido com tag showMap
             //out.writeUTF(this.name);
             out.flush();
         } catch (IOException e) {}
         finally {
-            lock.unlock();
+            writeLock.unlock();
         }
     }
 
 
     public Response receive() throws IOException {
         Response res = null;
+
         System.out.println("estou no receive");
-        lock.lock();
+
+
+        readLock.lock();
+
         try {
             int op = in.readInt();
             System.out.println(op);
@@ -136,7 +139,7 @@ public class TaggedConnectionServer extends TaggedConnection {
             return res;
         }
         finally {
-            lock.unlock();
+            readLock.unlock();
         }
     }
 }

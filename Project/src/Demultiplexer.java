@@ -1,6 +1,7 @@
 import Client.Response;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +25,7 @@ public class Demultiplexer implements AutoCloseable {
     }
 
     public Demultiplexer() throws Exception {
-        this.connection = new TaggedConnectionClient();
+        this.connection = new TaggedConnectionClient(new Socket("localhost", 12345));
         this.lock = new ReentrantLock();
         this.entradas = new HashMap<>();
     }
