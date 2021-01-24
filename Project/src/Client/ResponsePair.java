@@ -8,4 +8,12 @@ public class ResponsePair extends Response {
         this.x = x;
         this.y = y;
     }
+
+    public int getFirst() {
+        return this.x;
+    }
+
+    public int getSecond() {
+        return this.y;
+    }
 }

@@ -33,6 +33,7 @@ public class ServerSession implements Runnable{
                         ResponsePairString par = (ResponsePairString) request;
                         String username = par.getFirst();
                         String password = par.getSecond();
+                        this.name = username;
                         boolean b = SI.login(username, password);
                         connection.loginReply(b);
                         break;
@@ -46,11 +47,11 @@ public class ServerSession implements Runnable{
                         break;
 
                     case 2:
-
+                        ResponsePair parInt = (ResponsePair) request;
+                        SI.changeLocation(this.name, parInt.getFirst(), parInt.getSecond());
                         break;
 
                     case 3:
-                        ResponsePair parInt = (ResponsePair) request;
 
                         break;
 
