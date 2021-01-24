@@ -1,4 +1,5 @@
 import Client.Response;
+import Client.ResponsePair;
 import Client.ResponsePairString;
 import Client.ResponsePair;
 import Data.SystemInfo;
@@ -47,11 +48,19 @@ public class ServerSession implements Runnable{
                         break;
 
                     case 2:
+
                         ResponsePair parInt = (ResponsePair) request;
-                        SI.changeLocation(this.name, parInt.getFirst(), parInt.getSecond());
+                        SI.changeLocation(this.name, parInt.getX(), parInt.getY());
                         break;
 
+ 
+
                     case 3:
+                        ResponsePair p = (ResponsePair) request;
+                        int x = p.getX();
+                        int y = p.getY();
+                        int r = SI.getNUsersLoc(x,y);
+                        connection.sendNUsersLoc(r);
 
                         break;
 

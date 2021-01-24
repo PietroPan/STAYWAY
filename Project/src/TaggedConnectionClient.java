@@ -18,7 +18,6 @@ public class TaggedConnectionClient extends TaggedConnection {
             out.writeUTF(name);
             out.writeUTF(pass);
             out.flush();
-            System.out.println("Enviou o login ao server");
         }
         catch (IOException e) {
 

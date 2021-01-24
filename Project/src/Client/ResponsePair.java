@@ -9,11 +9,13 @@ public class ResponsePair extends Response {
         this.y = y;
     }
 
-    public int getFirst() {
-        return this.x;
+
+    public int getX() {
+        return x;
     }
 
-    public int getSecond() {
-        return this.y;
+    public int getY() {
+        return y;
+
     }
 }
