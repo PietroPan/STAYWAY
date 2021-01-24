@@ -50,11 +50,8 @@ public class ClientController {
         password = in.nextLine();
 
         try {
-            System.out.println("Entra no try");
             model.login(username, password);
-            System.out.println("Faz login no model");
             this.model.someoneWasInfected();
-            System.out.println("Começa à espera de aviso");
             menuPrincipal();
 
         } catch (Exception e) {
@@ -84,42 +81,42 @@ public class ClientController {
 
 
     public void menuPrincipal() {
-        int opcao = 10;
-        int x,y;
+        String opcao = "";
+        int x, y;
 
-        while (opcao != 0 && opcao != 4) {
+        while (!opcao.equals("0") && !opcao.equals("4")) {
             this.view.menuCliente();
-            opcao = in.nextInt();
+            opcao = in.nextLine();
 
             switch (opcao) {
-                case 1:
+                case "1":
                     this.view.indicarLocalizacao();
-                    x = this.in.nextInt();
-                    y = this.in.nextInt();
+                    x = Integer.parseInt(in.nextLine());
+                    y = Integer.parseInt(in.nextLine());
                     this.model.setLocalizacao(x, y);
                     break;
 
-                case 2: // número de pessoas numa localização
+                case "2": // número de pessoas numa localização
                     this.view.indicarLocalizacao();
-                    x = this.in.nextInt();
-                    y = this.in.nextInt();
+                    x = Integer.parseInt(in.nextLine());
+                    y = Integer.parseInt(in.nextLine()); // CONTROLAR CASOS EM QUE NÃO É INTRODUZIDO UM NR
                     this.model.numeroPessoasLocalizacao(x, y);
                     break;
 
-                case 3:
+                case "3":
                     // ??
                     break;
 
-                case 4:
+                case "4":
                     this.view.printMessage("O sitema foi informado.");
                     this.model.isInfected();
                     break;
 
-                case 5:
+                case "5":
                     this.model.showMap();
                     break;
 
-                case 0:
+                case "6":
                     break;
 
                 default:

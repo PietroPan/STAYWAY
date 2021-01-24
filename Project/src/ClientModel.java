@@ -18,9 +18,7 @@ public class ClientModel {
     public boolean login(String username, String password) throws ExceptionIncorretLogin, IOException, InterruptedException {
         boolean success = false;
         dm.login(username, password);
-        System.out.println("Faz login no demultiplexer");
         ResponseBool data = (ResponseBool) dm.receive(0);
-        System.out.println("Recebe a resposta do server");
 
         success = data.getBool();
         if (!success) {

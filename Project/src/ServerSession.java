@@ -1,4 +1,5 @@
 import Client.Response;
+import Client.ResponsePair;
 import Client.ResponsePairString;
 import Data.SystemInfo;
 
@@ -34,6 +35,14 @@ public class ServerSession implements Runnable{
                         String password = par.getSecond();
                         boolean b = SI.login(username, password);
                         connection.loginReply(b);
+                        break;
+
+                    case 3:
+                        ResponsePair p = (ResponsePair) request;
+                        int x = p.getX();
+                        int y = p.getY();
+                        int r = SI.getNUsersLoc(x,y);
+                        connection.sendNUsersLoc(r);
                         break;
 
                     default:
