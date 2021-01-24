@@ -8,24 +8,29 @@ public class ClientController {
     private ClientModel model;
     private Scanner in = new Scanner(System.in);
 
+    public ClientController() throws Exception {
+        this.view = new ClientView();
+        this.model = new ClientModel();
+    }
+
 
     public void menuInicial() {
-        int opcao = 10;
+        String opcao = "";
 
-        while (opcao != 0) {
+        while (!opcao.equals("0")) {
             this.view.inicioCliente();
-            opcao = in.nextInt();
+            opcao = in.nextLine();
 
             switch (opcao) {
-                case 1:
+                case "1":
                     this.loginCliente();
                     break;
 
-                case 2:
+                case "2":
                     this.registoCliente();
                     break;
 
-                case 0:
+                case "0":
                     break;
 
                 default:
@@ -45,8 +50,11 @@ public class ClientController {
         password = in.nextLine();
 
         try {
+            System.out.println("Entra no try");
             model.login(username, password);
+            System.out.println("Faz login no model");
             this.model.someoneWasInfected();
+            System.out.println("Começa à espera de aviso");
             menuPrincipal();
 
         } catch (Exception e) {

@@ -1,5 +1,4 @@
-
-package Client;
+import Client.*;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -102,8 +101,9 @@ public class ClientModel {
     public void someoneWasInfected () {
         new Thread (() -> {
             while (true) {
+                System.out.println("Preso");
                 try {
-                    ResponseString data = (ResponseString) dm.receive(4);
+                    ResponseString data = (ResponseString) dm.receive(5);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }

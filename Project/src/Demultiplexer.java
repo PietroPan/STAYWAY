@@ -9,7 +9,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Demultiplexer implements AutoCloseable {
-    private TaggedConnection connection;
+    private TaggedConnectionClient connection;
     private ReentrantLock lock; // Porque temos que ter controlo de concorrência no acesso ao map
     private Map<Integer, Entry> entradas;
 
@@ -24,7 +24,7 @@ public class Demultiplexer implements AutoCloseable {
     }
 
     public Demultiplexer() throws Exception {
-        this.connection = new TaggedConnection();
+        this.connection = new TaggedConnectionClient();
         this.lock = new ReentrantLock();
         this.entradas = new HashMap<>();
     }
@@ -93,7 +93,7 @@ public class Demultiplexer implements AutoCloseable {
 
     ///////////////////////////////////////////// Envio de Requests ////////////////////////////////////////////////////
 
-    public void login(String username, String password) {
+    public void login(String username, String password) throws IOException, InterruptedException {
         connection.login(username, password);
     }
 
