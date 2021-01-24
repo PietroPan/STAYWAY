@@ -94,10 +94,12 @@ public class TaggedConnectionServer extends TaggedConnection {
 
     public Response receive() throws IOException {
         Response res = null;
-
         readLock.lock();
+
         try {
-            switch (in.readInt()) {
+            int op = in.readInt();
+            System.out.println(op);
+            switch (op) {
                 case 0:   // Login
                     res = new ResponsePairString(0, in.readUTF(), in.readUTF());
                     break;
@@ -122,8 +124,6 @@ public class TaggedConnectionServer extends TaggedConnection {
 
                 default:
                     break;
-
-
             }
             return res;
         }

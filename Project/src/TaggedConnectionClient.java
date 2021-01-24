@@ -29,6 +29,7 @@ public class TaggedConnectionClient extends TaggedConnection {
 
 
     public void register(String name,String pass) {
+        System.out.println("vou escrever no socket");
         try {
             writeLock.lock();
             out.writeInt(1); //Pedido com tag register

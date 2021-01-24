@@ -1,6 +1,7 @@
 import Client.Response;
 import Client.ResponsePair;
 import Client.ResponsePairString;
+import Client.ResponsePair;
 import Data.SystemInfo;
 
 import java.io.*;
@@ -35,6 +36,17 @@ public class ServerSession implements Runnable{
                         String password = par.getSecond();
                         boolean b = SI.login(username, password);
                         connection.loginReply(b);
+                        break;
+
+                    case 1:
+                        par = (ResponsePairString) request;
+                        username = par.getFirst();
+                        password = par.getSecond();
+                        b = SI.register(username, password);
+                        connection.registerReply(b);
+                        break;
+
+                    case 2:
                         break;
 
                     case 3:
