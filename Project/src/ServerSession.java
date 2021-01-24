@@ -43,14 +43,17 @@ public class ServerSession implements Runnable{
                         par = (ResponsePairString) request;
                         username = par.getFirst();
                         password = par.getSecond();
+                        this.name = username;
                         b = SI.register(username, password);
                         connection.registerReply(b);
                         break;
 
                     case 2:
-
+                        System.out.println("oi1");
                         ResponsePair parInt = (ResponsePair) request;
+                        System.out.println("oi2");
                         SI.changeLocation(this.name, parInt.getX(), parInt.getY());
+                        System.out.println("2: "+parInt);
                         break;
 
  
@@ -60,6 +63,7 @@ public class ServerSession implements Runnable{
                         int x = p.getX();
                         int y = p.getY();
                         int r = SI.getNUsersLoc(x,y);
+                        System.out.println("3: "+r);
                         connection.sendNUsersLoc(r);
 
                         break;

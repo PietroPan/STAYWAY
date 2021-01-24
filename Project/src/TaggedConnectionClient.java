@@ -46,7 +46,7 @@ public class TaggedConnectionClient extends TaggedConnection {
         try {
             writeLock.lock();
             out.writeInt(2);//Pedido com tag setLocation
-            out.writeUTF(this.name);
+            //out.writeUTF(this.name);
             out.writeInt(x);
             out.writeInt(y);
             out.flush();
@@ -86,7 +86,7 @@ public class TaggedConnectionClient extends TaggedConnection {
         try {
             writeLock.lock();
             out.writeInt(5);//Pedido com tag isInfected
-            out.writeUTF(this.name);
+            //out.writeUTF(this.name);
             out.flush();
         }catch (IOException e) {}
         finally {
@@ -98,7 +98,7 @@ public class TaggedConnectionClient extends TaggedConnection {
         try {
             writeLock.lock();
             out.writeInt(6);//Pedido com tag showMap
-            out.writeUTF(this.name);
+            //out.writeUTF(this.name);
             out.flush();
         } catch (IOException e) {}
         finally {
