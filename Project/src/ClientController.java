@@ -73,7 +73,9 @@ public class ClientController {
 
         try {
             model.register(username, password);
+            System.out.println("vai entrar na thread q ve se alguem foi infetado");
             this.model.someoneWasInfected();
+            System.out.println("something is wrong :)");
             menuPrincipal();
 
         } catch (Exception e) {

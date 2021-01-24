@@ -1,5 +1,6 @@
 import Client.Response;
 import Client.ResponsePairString;
+import Client.ResponsePair;
 import Data.SystemInfo;
 
 import java.io.*;
@@ -25,6 +26,7 @@ public class ServerSession implements Runnable{
         try (this.connection) {
             while (true) {
                 Response request = connection.receive();
+                System.out.println("receive done server");
                 int tag = request.getTag();
 
                 switch(tag) {
@@ -34,6 +36,23 @@ public class ServerSession implements Runnable{
                         String password = par.getSecond();
                         boolean b = SI.login(username, password);
                         connection.loginReply(b);
+                        break;
+
+                    case 1:
+                        System.out.println("estou a ver o register");
+                        par = (ResponsePairString) request;
+                        username = par.getFirst();
+                        password = par.getSecond();
+                        b = SI.register(username, password);
+                        connection.registerReply(b);
+                        break;
+
+                    case 2:
+                        break;
+
+                    case 3:
+                        ResponsePair parInt = (ResponsePair) request;
+
                         break;
 
                     default:
