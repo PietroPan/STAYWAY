@@ -6,45 +6,45 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class TaggedConnectionClient extends TaggedConnection {
 
-    public TaggedConnectionClient() throws IOException {
-        super();
+    public TaggedConnectionClient(Socket s) throws IOException {
+        super(s);
     }
 
 
     public void login(String name, String pass) throws IOException, InterruptedException {
-        lock.lock();
+        writeLock.lock();
         try {
             out.writeInt(0); //Pedido com tag login
-            //out.writeBoolean(CLIENT); // Vem do cliente
             out.writeUTF(name);
             out.writeUTF(pass);
             out.flush();
+            System.out.println("Enviou o login ao server");
         }
         catch (IOException e) {
 
         }
         finally {
-            lock.unlock();
+            writeLock.unlock();
         }
     }
 
 
     public void register(String name,String pass) {
         try {
-            lock.lock();
+            writeLock.lock();
             out.writeInt(1); //Pedido com tag register
             out.writeUTF(name);
             out.writeUTF(pass);
             out.flush();
         } catch (IOException e) {}
         finally {
-            lock.unlock();
+            writeLock.unlock();
         }
     }
 
     public void setLocation(int x,int y) {
         try {
-            lock.lock();
+            writeLock.lock();
             out.writeInt(2);//Pedido com tag setLocation
             out.writeUTF(this.name);
             out.writeInt(x);
@@ -52,57 +52,57 @@ public class TaggedConnectionClient extends TaggedConnection {
             out.flush();
         } catch (IOException e) {}
         finally {
-            lock.unlock();
+            writeLock.unlock();
         }
     }
 
     public void getNUsersLoc(int x,int y) {
         try {
-            lock.lock();
+            writeLock.lock();
             out.writeInt(3);//Pedido com tag getNUsersLoc
             out.writeInt(x);
             out.writeInt(y);
             out.flush();
         } catch (IOException e) {}
         finally {
-            lock.unlock();
+            writeLock.unlock();
         }
     }
 
     public void waitLocation(int x,int y){
         try {
-            lock.lock();
+            writeLock.lock();
             out.writeInt(4);//Pedido com tag waitLocation
             out.writeInt(x);
             out.writeInt(y);
             out.flush();
         } catch (IOException e) {}
         finally {
-            lock.unlock();
+            writeLock.unlock();
         }
     }
 
     public void isInfected(){
         try {
-            lock.lock();
+            writeLock.lock();
             out.writeInt(5);//Pedido com tag isInfected
             out.writeUTF(this.name);
             out.flush();
         }catch (IOException e) {}
         finally {
-            lock.unlock();
+            writeLock.unlock();
         }
     }
 
     public void showMap(){
         try {
-            lock.lock();
+            writeLock.lock();
             out.writeInt(6);//Pedido com tag showMap
             out.writeUTF(this.name);
             out.flush();
         } catch (IOException e) {}
         finally {
-            lock.unlock();
+            writeLock.unlock();
         }
     }
 
@@ -110,7 +110,7 @@ public class TaggedConnectionClient extends TaggedConnection {
     public Response receive() throws IOException {
         Response res = null;
 
-        lock.lock();
+        readLock.lock();
         try {
             switch (in.readInt()) {
                 case 0:   // Login
@@ -151,7 +151,7 @@ public class TaggedConnectionClient extends TaggedConnection {
             return res;
         }
         finally {
-            lock.unlock();
+            readLock.unlock();
         }
     }
     /*
