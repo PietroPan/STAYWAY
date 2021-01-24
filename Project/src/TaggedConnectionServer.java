@@ -25,12 +25,8 @@ public class TaggedConnectionServer extends TaggedConnection {
     }
 
     public void registerReply(boolean bool) {
-        System.out.println("vou respinder");
-        lock.lock();
         try {
-
             writeLock.lock();
-
             out.writeInt(1);
             out.writeBoolean(bool);
             out.flush();
@@ -98,10 +94,6 @@ public class TaggedConnectionServer extends TaggedConnection {
 
     public Response receive() throws IOException {
         Response res = null;
-
-        System.out.println("estou no receive");
-
-
         readLock.lock();
 
         try {
@@ -112,7 +104,6 @@ public class TaggedConnectionServer extends TaggedConnection {
                     res = new ResponsePairString(0, in.readUTF(), in.readUTF());
                     break;
                 case 1:   //Register
-                    System.out.println("register");
                     res = new ResponsePairString(1, in.readUTF(), in.readUTF());
                     break;
                 case 2: // Update Location
@@ -133,8 +124,6 @@ public class TaggedConnectionServer extends TaggedConnection {
 
                 default:
                     break;
-
-
             }
             return res;
         }

@@ -26,7 +26,6 @@ public class ServerSession implements Runnable{
         try (this.connection) {
             while (true) {
                 Response request = connection.receive();
-                System.out.println("receive done server");
                 int tag = request.getTag();
 
                 switch(tag) {
@@ -39,7 +38,6 @@ public class ServerSession implements Runnable{
                         break;
 
                     case 1:
-                        System.out.println("estou a ver o register");
                         par = (ResponsePairString) request;
                         username = par.getFirst();
                         password = par.getSecond();
@@ -48,6 +46,7 @@ public class ServerSession implements Runnable{
                         break;
 
                     case 2:
+
                         break;
 
                     case 3:
