@@ -1,25 +1,80 @@
+import Client.Response;
+import Client.ResponsePair;
+import Client.ResponsePairString;
+import Client.ResponsePair;
 import Data.SystemInfo;
 
 import java.io.*;
 import java.net.Socket;
 
 public class ServerSession implements Runnable{
-    private Socket s;
+    private final TaggedConnectionServer connection; // hmmm deixar o final ou mudar o try-with-resources
     private SystemInfo SI;
-    private DataInputStream in;
-    private DataOutputStream out;
     private String name;
-    //FALTA CLASSE TAGGED CONNECTION
 
     public ServerSession(Socket s, SystemInfo SI) throws IOException {
-        this.s=s;
+        this.connection = new TaggedConnectionServer(s);
         this.SI=SI;
-        this.in=new DataInputStream(new BufferedInputStream(s.getInputStream()));
-        this.out=new DataOutputStream(new BufferedOutputStream(s.getOutputStream()));
+    }
+
+    public ServerSession(TaggedConnectionServer tc, SystemInfo SI) throws IOException {
+        this.connection = tc;
+        this.SI=SI;
     }
 
     @Override
     public void run() {
-        //Demultiplexer Parte do Servidor
+        try (this.connection) {
+            while (true) {
+                Response request = connection.receive();
+                int tag = request.getTag();
+
+                switch(tag) {
+                    case 0:
+                        ResponsePairString par = (ResponsePairString) request;
+                        String username = par.getFirst();
+                        String password = par.getSecond();
+                        this.name = username;
+                        boolean b = SI.login(username, password);
+                        connection.loginReply(b);
+                        break;
+
+                    case 1:
+                        par = (ResponsePairString) request;
+                        username = par.getFirst();
+                        password = par.getSecond();
+                        b = SI.register(username, password);
+                        connection.registerReply(b);
+                        break;
+
+                    case 2:
+
+                        ResponsePair parInt = (ResponsePair) request;
+                        SI.changeLocation(this.name, parInt.getX(), parInt.getY());
+                        break;
+
+ 
+
+                    case 3:
+                        ResponsePair p = (ResponsePair) request;
+                        int x = p.getX();
+                        int y = p.getY();
+                        int r = SI.getNUsersLoc(x,y);
+                        connection.sendNUsersLoc(r);
+
+                        break;
+
+                    default:
+
+                        break;
+
+
+
+
+
+                        
+                }
+            }
+        } catch (Exception ignored) { }
     }
 }

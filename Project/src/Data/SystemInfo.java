@@ -16,7 +16,7 @@ public class SystemInfo {
 
     public boolean login(String name,String pass){
         User u=users.get(name);
-        if (u!=null&&u.getPassword().equals(pass)){
+        if (u!=null && u.getPassword().equals(pass)){
             //LocationsMap.waitInfected(name,...); NEEDS IO
             return true;
         } else return false;
