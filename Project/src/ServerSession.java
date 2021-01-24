@@ -55,9 +55,7 @@ public class ServerSession implements Runnable{
                         SI.changeLocation(this.name, parInt.getX(), parInt.getY());
                         System.out.println("2: "+parInt);
                         break;
-
- 
-
+                        
                     case 3:
                         ResponsePair p = (ResponsePair) request;
                         int x = p.getX();

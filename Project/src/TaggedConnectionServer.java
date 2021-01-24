@@ -108,7 +108,7 @@ public class TaggedConnectionServer extends TaggedConnection {
                     res = new ResponsePairString(1, in.readUTF(), in.readUTF());
                     break;
                 case 2: // Update Location
-
+                    res = new ResponsePair(2, in.readInt(), in.readInt());
                     break;
                 case 3:   //People at location
                     res = new ResponsePair(3, in.readInt(), in.readInt());
