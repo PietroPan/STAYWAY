@@ -5,6 +5,9 @@ import Data.LocationsMap;
 import Data.User;
 import Data.Users;
 
+import java.util.AbstractMap;
+import java.util.Map;
+
 public class SystemInfo {
     private Users users = new Users();
     private LocationsMap locationsMap=new LocationsMap(); //Mapa
@@ -53,10 +56,10 @@ public class SystemInfo {
 
     public boolean waitForLocation(int x, int y){
         Location l=new Location(x,y);
-        if (locationsMap.isAlreadyZero(l)) {//Se não estiver ninguem na localizacao
-            return false;
-        }
-        //locationsMap.waitForLocation(l,...);//Fica a espera que localizacao fique vazia NEEDS IO
+        //if (locationsMap.isAlreadyZero(l)) {//Se não estiver ninguem na localizacao
+        //    return false;
+        //}
+        locationsMap.waitForLocation(l);//Fica a espera que localizacao fique vazia NEEDS IO
         return true;
     }
 
@@ -67,12 +70,10 @@ public class SystemInfo {
         locationsMap.wakeInfected(u.getContacts());
     }
 
-    public boolean showMap(String name){
+    public Map.Entry<Boolean,int[][][]> showMap(String name){
         User u = users.get(name);
-        if (u.isVip()){
-            //locationsMap.readMap(...); NEEDS IO
-            return true;
-        }
-        return false;
+        Boolean res = u.isVip();
+        if (res) return new AbstractMap.SimpleEntry<>(res, locationsMap.readMap());
+        return new AbstractMap.SimpleEntry<>(res,new int[0][0][0]);
     }
 }

@@ -131,16 +131,17 @@ public class TaggedConnectionClient extends TaggedConnection {
                     res = new ResponseString(5, "Esteve com alguém infetado!!");
                     break;
                 case 6:   //Map
+                    int [][][] matrix = null;
                     if (in.readBoolean()) {
-                        int [][][] matrix = new int [2][10][10];
+                        matrix = new int [2][10][10];
                         for (int i=0;i<10;i++){
                             for (int j=0;j<10;j++){
                                 matrix[0][i][j] = in.readInt();
                                 matrix[1][i][j] = in.readInt();
                             }
                         }
-                        res = new ResponseIntMatrix(6, matrix);
                     }
+                    res = new ResponseIntMatrix(6, matrix);
                     break;
 
                 default:

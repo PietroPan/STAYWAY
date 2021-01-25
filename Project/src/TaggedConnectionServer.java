@@ -79,10 +79,18 @@ public class TaggedConnectionServer extends TaggedConnection {
         }
     }
 
-    public void showMap(){
+    public void showMap(int[][][] matrix, boolean res){
         try {
             writeLock.lock();
             out.writeInt(6);//Pedido com tag showMap
+            out.writeBoolean(res);
+            if (res)
+                for (int i = 0; i < 10; i++) {
+                    for (int j = 0; j < 10; j++) {
+                        out.writeInt(matrix[0][i][j]);
+                        out.writeInt(matrix[1][i][j]);
+                    }
+                }
             //out.writeUTF(this.name);
             out.flush();
         } catch (IOException e) {}
@@ -117,10 +125,10 @@ public class TaggedConnectionServer extends TaggedConnection {
                     res = new ResponsePair(4,in.readInt(), in.readInt());
                     break;
                 case 5:   //Infected
-                    res = new ResponseString(5, in.readUTF());
+                    res = new ResponseString(5, "NULL");//Não precisa de nada
                     break;
                 case 6:   //Map
-                    res = new ResponseString(6, in.readUTF());
+                    res = new ResponseString(6, "NULL");//Não precisa de nada
                     break;
 
                 default:

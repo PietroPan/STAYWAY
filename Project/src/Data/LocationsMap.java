@@ -68,7 +68,7 @@ public class LocationsMap {
         lock.writeLock().unlock();
     }
 
-    public void waitForLocation(Location loc, DataOutputStream out){//Esperar que location fique vazia
+    public void waitForLocation(Location loc){//Esperar que location fique vazia
         /*new Thread(() -> {
             try {
                 this.lock.writeLock().lock();
@@ -86,19 +86,19 @@ public class LocationsMap {
             } catch (InterruptedException | IOException e) {}
         }).start();*/
 
-        new Thread(() -> {
+        //new Thread(() -> {
             try {
                 this.lock.writeLock().lock();
 
                 LocationInfo locI = map[loc.getX()][loc.getY()];
-                while (!locI.isEmpty()) waitLocation.wait();
+                while (!locI.isEmpty()) waitLocation.await();
                 //IO RESPONSE
                 this.lock.writeLock().unlock();
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }).start();
+        //}).start();
         /* NOTE
         Varios threads podem esperar pela mesma loc
         Sol: Cliente tem lista de loc que esta a espera
@@ -137,16 +137,20 @@ public class LocationsMap {
         }
     }
 
-    public void readMap(DataOutputStream out) throws IOException {//Manda toda a informação do map para client
-        lock.writeLock().lock();
-        for (int i=0;i<10;i++){
-            for (int j=0;j<10;j++){
-                //out.writeInt(map[i][j].getCurrentPeople());
-                out.writeInt(map[i][j].getTotalPeople());
-                out.writeInt(map[i][j].getInfectedPeople());
+    public int[][][] readMap() {//Manda toda a informação do map para client
+        try {
+            lock.writeLock().lock();
+            int [][][] res = new int[2][10][10];
+            for (int i=0;i<10;i++){
+                for (int j=0;j<10;j++){
+                    //out.writeInt(map[i][j].getCurrentPeople());
+                    res[0][i][j] = map[i][j].getTotalPeople();
+                    res[1][i][j] = map[i][j].getInfectedPeople();
+                }
             }
+            return res;
+        } finally {
+            lock.writeLock().unlock();
         }
-        out.flush();
-        lock.writeLock().unlock();
     }
 }

@@ -105,7 +105,10 @@ public class ClientController {
                     break;
 
                 case "3":
-                    // ??
+                    this.view.indicarLocalizacao();
+                    x = Integer.parseInt(in.nextLine());
+                    y = Integer.parseInt(in.nextLine());
+                    this.model.waitLocation(x,y);
                     break;
 
                 case "4":

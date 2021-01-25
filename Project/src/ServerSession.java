@@ -1,11 +1,14 @@
 import Client.Response;
 import Client.ResponsePair;
 import Client.ResponsePairString;
+import Client.ResponseIntMatrix;
+import Client.ResponseString;
 import Client.ResponsePair;
 import Data.SystemInfo;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Map;
 
 public class ServerSession implements Runnable{
     private final TaggedConnectionServer connection; // hmmm deixar o final ou mudar o try-with-resources
@@ -49,11 +52,8 @@ public class ServerSession implements Runnable{
                         break;
 
                     case 2:
-                        System.out.println("oi1");
                         ResponsePair parInt = (ResponsePair) request;
-                        System.out.println("oi2");
                         SI.changeLocation(this.name, parInt.getX(), parInt.getY());
-                        System.out.println("2: "+parInt);
                         break;
                         
                     case 3:
@@ -61,11 +61,27 @@ public class ServerSession implements Runnable{
                         int x = p.getX();
                         int y = p.getY();
                         int r = SI.getNUsersLoc(x,y);
-                        System.out.println("3: "+r);
                         connection.sendNUsersLoc(r);
-
                         break;
 
+                    case 4:
+                        ResponsePair p4 = (ResponsePair) request;
+                        x = p4.getX();
+                        y = p4.getY();
+                        new Thread( () -> {
+                            SI.waitForLocation(x,y);
+                            connection.locationAvailable(x,y);
+                        }).start();
+                        break;
+
+                    case 5:
+                        SI.isInfected(this.name);
+                        break;
+
+                    case 6:
+                        Map.Entry<Boolean,int[][][]> resMat = SI.showMap(this.name);
+                        connection.showMap(resMat.getValue(),resMat.getKey());
+                        break;
                     default:
 
                         break;

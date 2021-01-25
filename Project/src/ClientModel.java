@@ -50,7 +50,7 @@ public class ClientModel {
         new Thread (() -> {
             try {
                 dm.waitLocation(x, y);
-                ResponsePair data = (ResponsePair) dm.receive(2);
+                ResponsePair data = (ResponsePair) dm.receive(4);
                 System.out.println("Localização (" + x + "," + y + ") disponível!");
 
             } catch (Exception e) {
@@ -85,12 +85,12 @@ public class ClientModel {
         new Thread (() -> {
             dm.showMap();
              try {
-                 ResponseIntMatrix map = (ResponseIntMatrix) dm.receive(5);
+                 ResponseIntMatrix map = (ResponseIntMatrix) dm.receive(6);
 
-                 if (map == null) {
+                 if (map.getMatrix() == null) {
                      System.out.println("Não te permissões para executar este comando!");
                  } else {
-                    //fazer print
+                     System.out.println(Arrays.deepToString(map.getMatrix()));
                  }
              } catch (Exception e) {
                  System.out.println(e.getMessage());
