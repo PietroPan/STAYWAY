@@ -66,9 +66,11 @@ public class ClientController {
         this.view.registoCliente();
         username = in.nextLine();
         password = in.nextLine();
+        int x = Integer.parseInt(in.nextLine());
+        int y = Integer.parseInt(in.nextLine());
 
         try {
-            model.register(username, password);
+            model.register(username, password, x, y);
             menuPrincipal();
 
         } catch (Exception e) {
@@ -84,9 +86,10 @@ public class ClientController {
         String opcao = "";
         int x, y;
 
-        while (!opcao.equals("0") && !opcao.equals("4")) {
+        while (!opcao.equals("0")) {
             this.view.menuCliente();
             opcao = in.nextLine();
+            System.out.println(opcao);
 
             switch (opcao) {
                 case "1":
@@ -120,10 +123,10 @@ public class ClientController {
                     break;
 
                 case "6":
+                    this.model.changeVip();
                     break;
 
-                case "7":
-                    this.model.changeVip();
+                case "0":
                     break;
 
                 default:

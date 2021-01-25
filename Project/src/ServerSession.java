@@ -1,9 +1,7 @@
 import Client.Response;
 import Client.ResponsePair;
 import Client.ResponsePairString;
-import Client.ResponseIntMatrix;
-import Client.ResponseString;
-import Client.ResponsePair;
+import Client.ResponseStringsInts;
 import Data.SystemInfo;
 
 import java.io.*;
@@ -43,11 +41,13 @@ public class ServerSession implements Runnable{
                         break;
 
                     case 1:
-                        par = (ResponsePairString) request;
-                        username = par.getFirst();
-                        password = par.getSecond();
+                        ResponseStringsInts sti = (ResponseStringsInts) request;
+                        username = sti.getFirstStr();
+                        password = sti.getSecondStr();
+                        int x = sti.getFirstInt();
+                        int y = sti.getSecondInt();
                         this.name = username;
-                        boolean b = SI.register(username, password);
+                        boolean b = SI.register(username, password, x, y);
                         connection.registerReply(b);
                         break;
 
@@ -58,8 +58,8 @@ public class ServerSession implements Runnable{
                         
                     case 3:
                         ResponsePair p = (ResponsePair) request;
-                        int x = p.getX();
-                        int y = p.getY();
+                        x = p.getX();
+                        y = p.getY();
                         int r = SI.getNUsersLoc(x,y);
                         connection.sendNUsersLoc(r);
                         break;

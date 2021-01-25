@@ -26,10 +26,10 @@ public class SystemInfo {
         return r;
     }
 
-    public boolean register(String name,String pass){
+    public boolean register(String name,String pass,int x,int y){
         if (users.containsKey(name)) return false;
         else {
-            Location loc = new Location(0,0);//Default
+            Location loc = new Location(x,y);//Default
             User u = new User(name,pass,loc);
             users.add(name,u);
             users.updateUsers(name,loc);

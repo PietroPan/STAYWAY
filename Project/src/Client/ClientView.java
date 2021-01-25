@@ -15,6 +15,7 @@ public class ClientView {
 
     public void registoCliente() {
         loginCliente();
+        indicarLocalizacao();
     }
 
     public void menuCliente() {
@@ -23,7 +24,6 @@ public class ClientView {
         System.out.println("3-Informar sobre localização vazia");
         System.out.println("4-Informar contágio");
         System.out.println("5-Descarregar mapa");
-        System.out.println("6-Lista de Comandos");
         System.out.println("0-Log Out");
     }
 
@@ -36,8 +36,8 @@ public class ClientView {
     }
 
     public void indicarLocalizacao() {
-        System.out.println("1º - Coordenada x");
-        System.out.println("2º - Coordenada y");
+        System.out.println("Coordenada x: ");
+        System.out.println("Coordenada y: ");
     }
 
     public void printMessage (String message) {

@@ -28,12 +28,14 @@ public class TaggedConnectionClient extends TaggedConnection {
     }
 
 
-    public void register(String name,String pass) {
+    public void register(String name,String pass, int x, int y) {
         try {
             writeLock.lock();
             out.writeInt(1); //Pedido com tag register
             out.writeUTF(name);
             out.writeUTF(pass);
+            out.writeInt(x);
+            out.writeInt(y);
             out.flush();
         } catch (IOException e) {}
         finally {

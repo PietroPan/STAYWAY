@@ -98,8 +98,8 @@ public class Demultiplexer implements AutoCloseable {
         connection.login(username, password);
     }
 
-    public void register(String username, String password) {
-        connection.register(username, password);
+    public void register(String username, String password, int x, int y) {
+        connection.register(username, password,x,y);
     }
 
     public void setLocation(int x, int y) {

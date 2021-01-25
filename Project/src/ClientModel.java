@@ -27,9 +27,9 @@ public class ClientModel {
         else return true;
     }
 
-    public boolean register(String username, String password) throws ExceptionImpossibleRegister, IOException, InterruptedException {
+    public boolean register(String username, String password, int x, int y) throws ExceptionImpossibleRegister, IOException, InterruptedException {
         boolean success = false;
-        dm.register(username, password);
+        dm.register(username, password, x, y);
         ResponseBool data = (ResponseBool) dm.receive(1);
 
         success = data.getBool();
@@ -90,7 +90,7 @@ public class ClientModel {
                  if (map.getMatrix() == null) {
                      System.out.println("Não te permissões para executar este comando!");
                  } else {
-                     System.out.println(Arrays.deepToString(map.getMatrix()));
+                     printMap(map.getMatrix());
                  }
              } catch (Exception e) {
                  System.out.println(e.getMessage());
@@ -123,4 +123,13 @@ public class ClientModel {
         }).start();
     }
 
+    public void printMap(int[][][] m){
+        for (int i=0;i<10;i++){
+            System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------");
+            System.out.println("|  Pos  ("+i+",0)  |  Pos  ("+i+",1)  |  Pos  ("+i+",2)  |  Pos  ("+i+",3)  |  Pos  ("+i+",4)  |  Pos  ("+i+",5)  |  Pos  ("+i+",6)  |  Pos  ("+i+",7)  |  Pos  ("+i+",8)  |  Pos  ("+i+",9)  |");
+            System.out.println("| Pessoas:   "+m[0][i][0]+" | Pessoas:   "+m[0][i][1]+" | Pessoas:   "+m[0][i][2]+" | Pessoas:   "+m[0][i][3]+" | Pessoas:   "+m[0][i][4]+" | Pessoas:   "+m[0][i][5]+" | Pessoas:   "+m[0][i][6]+" | Pessoas:   "+m[0][i][7]+" | Pessoas:   "+m[0][i][8]+" | Pessoas:   "+m[0][i][9]+" |");
+            System.out.println("| Infetados: "+m[1][i][0]+" | Infetados: "+m[1][i][1]+" | Infetados: "+m[1][i][2]+" | Infetados: "+m[1][i][3]+" | Infetados: "+m[1][i][4]+" | Infetados: "+m[1][i][5]+" | Infetados: "+m[1][i][6]+" | Infetados: "+m[1][i][7]+" | Infetados: "+m[1][i][8]+" | Infetados: "+m[1][i][9]+" |");
+        }
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------");
+    }
 }
