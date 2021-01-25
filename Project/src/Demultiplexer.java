@@ -122,4 +122,8 @@ public class Demultiplexer implements AutoCloseable {
         connection.showMap();
     }
 
+    public void changeVip() {connection.changeVip();}
+
+    public void waitInfected() {connection.waitInfected();}
+
 }

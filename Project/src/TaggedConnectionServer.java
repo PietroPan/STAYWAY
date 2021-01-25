@@ -9,11 +9,11 @@ public class TaggedConnectionServer extends TaggedConnection {
         super(s);
     }
 
-    public void loginReply(boolean bool) {
+    public void loginReply(int i) {
         writeLock.lock();
         try {
             out.writeInt(0);
-            out.writeBoolean(bool);
+            out.writeInt(i);
             out.flush();
 
         } catch (IOException e) {
@@ -71,7 +71,7 @@ public class TaggedConnectionServer extends TaggedConnection {
         try {
             writeLock.lock();
             out.writeInt(5);//Pedido com tag isInfected
-            out.writeUTF(this.name);
+            //out.writeUTF(this.name);
             out.flush();
         }catch (IOException e) {}
         finally {
@@ -125,10 +125,16 @@ public class TaggedConnectionServer extends TaggedConnection {
                     res = new ResponsePair(4,in.readInt(), in.readInt());
                     break;
                 case 5:   //Infected
-                    res = new ResponseString(5, "NULL");//Não precisa de nada
+                    res = new ResponseString(5, null);//Não precisa de nada
                     break;
                 case 6:   //Map
-                    res = new ResponseString(6, "NULL");//Não precisa de nada
+                    res = new ResponseString(6, null);//Não precisa de nada
+                    break;
+                case 7:
+                    res = new ResponseString(7,null);
+                    break;
+                case 8:
+                    res = new ResponseString(8, null);
                     break;
 
                 default:

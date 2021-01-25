@@ -51,7 +51,6 @@ public class ClientController {
 
         try {
             model.login(username, password);
-            this.model.someoneWasInfected();
             menuPrincipal();
 
         } catch (Exception e) {
@@ -70,8 +69,7 @@ public class ClientController {
 
         try {
             model.register(username, password);
-            System.out.println("vai entrar na thread q ve se alguem foi infetado");
-            this.model.someoneWasInfected();
+            //System.out.println("vai entrar na thread q ve se alguem foi infetado");
             menuPrincipal();
 
         } catch (Exception e) {
@@ -82,6 +80,8 @@ public class ClientController {
 
 
     public void menuPrincipal() {
+        this.model.someoneWasInfected();
+        this.model.waitInfected();
         String opcao = "";
         int x, y;
 
@@ -121,6 +121,10 @@ public class ClientController {
                     break;
 
                 case "6":
+                    break;
+
+                case "7":
+                    this.model.changeVip();
                     break;
 
                 default:

@@ -106,25 +106,22 @@ public class LocationsMap {
          */
     }
 
-    public void waitInfected(String name, DataOutputStream out){//Espera até estar potencialmente infetado
-        new Thread(()->{
+    public void waitInfected(String name){//Espera até estar potencialmente infetado
+        //new Thread(()->{
             try {
-                condsInf.put(name,lock.writeLock().newCondition());
-                while (true) {
-                    this.lock.writeLock().lock();
-                    condsInf.get(name).await();
-                    System.out.println("Answer");
-                    out.writeInt(4);
-                    out.flush();
-                    this.lock.writeLock().unlock();
-                }
-            } catch (IOException | InterruptedException e) {}
-        }).start();
+                if (!condsInf.containsKey(name)) condsInf.put(name,lock.writeLock().newCondition());
+                this.lock.writeLock().lock();
+                condsInf.get(name).await();
+                this.lock.writeLock().unlock();
+            } catch (InterruptedException e) {}
+        //}).start();
     }
 
     public void wakeInfected(Set<String> users){//Acorda todos os potencialmente infetados
         this.lock.writeLock().lock();
-        for (String i : users) condsInf.get(i).signalAll();
+        for (String i : users) {
+            condsInf.get(i).signalAll();
+        }
         this.lock.writeLock().unlock();
     }
 

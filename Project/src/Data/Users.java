@@ -16,7 +16,6 @@ public class Users {
     public Users(){
         this.users=new HashMap<>();
         lock=new ReentrantReadWriteLock();
-        this.add("mane", new User("mane", "1234", new Location(0,0)));
     }
 
 

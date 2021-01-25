@@ -15,16 +15,16 @@ public class ClientModel {
 
     //////////////////////////// Pedidos Cliente //////////////////////////////
 
-    public boolean login(String username, String password) throws ExceptionIncorretLogin, IOException, InterruptedException {
-        boolean success = false;
+    public boolean login(String username, String password) throws ExceptionIncorretLogin, IOException, InterruptedException, ExceptionIsInfected {
+        int success = 0;
         dm.login(username, password);
-        ResponseBool data = (ResponseBool) dm.receive(0);
+        ResponseInt data = (ResponseInt) dm.receive(0);
 
-        success = data.getBool();
-        if (!success) {
+        success = data.getInt();
+        if (success==0) {
             throw new ExceptionIncorretLogin("Username ou Password errados.");
-        }
-        return success;
+        } else if (success==1) throw new ExceptionIsInfected("Está infetado! Sistema Bloqueado");
+        else return true;
     }
 
     public boolean register(String username, String password) throws ExceptionImpossibleRegister, IOException, InterruptedException {
@@ -104,10 +104,23 @@ public class ClientModel {
                 System.out.println("Preso");
                 try {
                     ResponseString data = (ResponseString) dm.receive(5);
+                    System.out.println(data.getStr());
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
             }
+        }).start();
+    }
+
+    public void changeVip(){
+        new Thread(() -> {
+            dm.changeVip();
+        }).start();
+    }
+
+    public void waitInfected(){
+        new Thread(() ->{
+            dm.waitInfected();
         }).start();
     }
 

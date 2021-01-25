@@ -106,6 +106,28 @@ public class TaggedConnectionClient extends TaggedConnection {
         }
     }
 
+    public void changeVip(){
+        try{
+            writeLock.lock();
+            out.writeInt(7);
+            out.flush();
+            writeLock.unlock();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void waitInfected(){
+        try {
+            writeLock.lock();
+            out.writeInt(8);
+            out.flush();
+            writeLock.unlock();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public Response receive() throws IOException {
         Response res = null;
@@ -114,7 +136,7 @@ public class TaggedConnectionClient extends TaggedConnection {
         try {
             switch (in.readInt()) {
                 case 0:   // Login
-                    res = new ResponseBool(0, in.readBoolean());
+                    res = new ResponseInt(0, in.readInt());
                     break;
                 case 1:   //Register
                     res = new ResponseBool(1, in.readBoolean());

@@ -38,8 +38,8 @@ public class ServerSession implements Runnable{
                         String username = par.getFirst();
                         String password = par.getSecond();
                         this.name = username;
-                        boolean b = SI.login(username, password);
-                        connection.loginReply(b);
+                        int i = SI.login(username, password);
+                        connection.loginReply(i);
                         break;
 
                     case 1:
@@ -47,7 +47,7 @@ public class ServerSession implements Runnable{
                         username = par.getFirst();
                         password = par.getSecond();
                         this.name = username;
-                        b = SI.register(username, password);
+                        boolean b = SI.register(username, password);
                         connection.registerReply(b);
                         break;
 
@@ -84,6 +84,17 @@ public class ServerSession implements Runnable{
                         break;
                     default:
 
+                    case 7:
+                        SI.changeVip(this.name);
+                        break;
+
+                    case 8:
+                        new Thread(() -> {
+                            while(true) {
+                                SI.waitInfected(this.name);
+                                connection.warningIsInfected();
+                            }
+                        }).start();
                         break;
 
 

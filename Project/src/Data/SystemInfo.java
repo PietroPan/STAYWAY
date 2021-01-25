@@ -17,12 +17,18 @@ public class SystemInfo {
         this.users= new Users();
     }
 
-    public boolean login(String name,String pass){
+    public int login(String name,String pass){
         User u=users.get(name);
-        if (u!=null && u.getPassword().equals(pass)){
-            //LocationsMap.waitInfected(name,...); NEEDS IO
-            return true;
-        } else return false;
+        int r;
+        /*if (u!=null && u.getPassword().equals(pass)){
+            r=0;
+
+        } else return 2;
+        if (u.isInfected()==true)*/
+            if (u==null||!u.getPassword().equals(pass)) r=0;
+            else if (u.isInfected()) r=1;
+            else r=2;
+            return r;
     }
 
     public boolean register(String name,String pass){
@@ -33,7 +39,6 @@ public class SystemInfo {
             users.add(name,u);
             users.updateUsers(name,loc);
             locationsMap.updateLocationsR(loc);
-            //LocationsMap.waitInfected(name,...); NEEDS IO
             return true;
         }
     }
@@ -74,6 +79,14 @@ public class SystemInfo {
         User u = users.get(name);
         Boolean res = u.isVip();
         if (res) return new AbstractMap.SimpleEntry<>(res, locationsMap.readMap());
-        return new AbstractMap.SimpleEntry<>(res,new int[0][0][0]);
+        return new AbstractMap.SimpleEntry<>(res,null);
+    }
+
+    public void changeVip(String name){
+        users.get(name).changeVip();
+    }
+
+    public void waitInfected(String name){
+        this.locationsMap.waitInfected(name);
     }
 }

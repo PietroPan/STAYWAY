@@ -105,4 +105,6 @@ public class User {
     public void addLocation(Location l){
         this.locations.add(l);
     }
+
+    public void changeVip(){this.isVip=!this.isVip;}
 }
