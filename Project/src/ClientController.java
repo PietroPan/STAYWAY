@@ -31,7 +31,7 @@ public class ClientController {
                     break;
 
                 case "0":
-                    //this.model.quit();
+                    this.model.quit();
                     break;
 
                 default:
@@ -83,7 +83,7 @@ public class ClientController {
 
     public void menuPrincipal() {
         this.model.someoneWasInfected();
-        this.model.waitInfected();
+        //this.model.waitInfected();
         String opcao = "";
         int x, y;
 
@@ -128,6 +128,7 @@ public class ClientController {
 
                 case "0":
                     this.model.logout();
+
                     break;
 
                 default:

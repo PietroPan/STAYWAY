@@ -175,7 +175,7 @@ public class TaggedConnectionClient extends TaggedConnection {
                     res = new ResponsePair(4,in.readInt(), in.readInt());
                     break;
                 case 5:   //Infected
-                    res = new ResponseString(5, "Esteve com alguém infetado!!");
+                    res = new ResponseString(5, in.readUTF());
                     break;
                 case 6:   //Map
                     int [][][] matrix = null;

@@ -67,11 +67,11 @@ public class TaggedConnectionServer extends TaggedConnection {
         }
     }
 
-    public void warningIsInfected(){
+    public void warningIsInfected(String r){
         try {
             writeLock.lock();
             out.writeInt(5);//Pedido com tag isInfected
-            //out.writeUTF(this.name);
+            out.writeUTF(r);
             out.flush();
         }catch (IOException e) {}
         finally {
