@@ -77,9 +77,8 @@ public class ClientModel {
 
 
     public void isInfected () {
-        new Thread (() -> {
-            dm.isInfected();
-        }).start();
+        dm.isInfected();
+
     }
 
     public void showMap () {
@@ -106,7 +105,7 @@ public class ClientModel {
             while (b) {
                 try {
                     ResponseString data = (ResponseString) dm.receive(5);
-                    if (data.getStr().equals("STOP")) b=false;
+                    if (data.getStr().equals("STOP")) b = false;
                     else System.out.println(data.getStr());
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
@@ -122,22 +121,13 @@ public class ClientModel {
         }).start();
     }
 
-    /*
-    public void waitInfected(){
-        new Thread(() ->{
-            dm.waitInfected();
-        }).start();
-    }
-    */
 
     public void logout(){
         dm.logout();
     }
 
     public void quit(){
-        new Thread(()->{
-            dm.quit();
-        }).start();
+        dm.quit();
     }
 
     public void printMap(int[][][] m){

@@ -53,14 +53,24 @@ public class Users {
         lock.writeLock().unlock();
     }
 
-    public void waitInfected(String name){//Espera até estar potencialmente infetado
+    public boolean waitInfected(String name){//Espera até estar potencialmente infetado
+        boolean b = true;
         try {
             this.lock.writeLock().lock();
             User u = users.get(name);
-            while (!u.isWarningInfected()) waitInfected.await();
+            b = u.isLogedIn();
+            while (!u.isWarningInfected() && b) {
+                waitInfected.await();
+                b = u.isLogedIn();
+            }
             u.setWarningInfected(false);
-            this.lock.writeLock().unlock();
+
         } catch (InterruptedException e) {}
+        finally {
+            this.lock.writeLock().unlock();
+        }
+        if (!b) return false;
+        return true;
     }
 
     public void wakeInfected(Set<String> users){//Acorda todos os potencialmente infetados
@@ -68,5 +78,15 @@ public class Users {
         for (String i : users) this.users.get(i).setWarningInfected(true);
         this.waitInfected.signalAll();
         this.lock.writeLock().unlock();
+    }
+
+    public void stopWait() {
+        this.lock.writeLock().lock();
+        try {
+            this.waitInfected.signalAll();
+        }
+        finally {
+            this.lock.writeLock().unlock();
+        }
     }
 }

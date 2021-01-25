@@ -77,6 +77,9 @@ public class ServerSession implements Runnable{
 
                     case 5:
                         SI.isInfected(this.name);
+                        SI.logout(this.name);
+                        SI.stopWait();
+                        connection.warningIsInfected("STOP");
                         break;
 
                     case 6:
@@ -90,12 +93,16 @@ public class ServerSession implements Runnable{
 
                     case 8:
                         new Thread(() -> {
-                            while(true) {
-                                SI.waitInfected(this.name);
-                                connection.warningIsInfected("Esteve com alguém infetado!!");
+                            System.out.println("Entra no thread");
+                            boolean b2=true;
+                            while(b2) {
+                                b2=SI.waitInfected(this.name);
+                                if (b2) connection.warningIsInfected("Esteve com alguém infetado!!");
                             }
+                            System.out.println("Sai do thread");
                         }).start();
                         break;
+
                     case 9:
                         SI.logout(this.name);
                         connection.warningIsInfected("STOP");

@@ -128,5 +128,14 @@ public class Demultiplexer implements AutoCloseable {
 
     public void logout() {connection.logout();}
 
-    public void quit() {connection.quit();}
+    public void quit() {
+        connection.quit();
+        try {
+            connection.close();
+        }
+        catch (IOException e) {
+            //...
+        }
+
+    }
 }

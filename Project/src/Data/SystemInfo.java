@@ -82,9 +82,13 @@ public class SystemInfo {
         users.get(name).changeVip();
     }
 
-    public void waitInfected(String name){
-        this.users.waitInfected(name);
+    public boolean waitInfected(String name){
+        return this.users.waitInfected(name);
     }
 
     public void logout(String name) {this.users.get(name).setLogedIn(false);}
+
+    public void stopWait() {
+        this.users.stopWait();
+    }
 }
