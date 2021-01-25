@@ -102,15 +102,18 @@ public class ClientModel {
     public void someoneWasInfected () {
         new Thread (() -> {
             dm.waitInfected();
-            while (true) {
+            boolean b=true;
+            while (b) {
                 try {
                     ResponseString data = (ResponseString) dm.receive(5);
-                    System.out.println(data.getStr());
+                    if (data.getStr().equals("STOP")) b=false;
+                    else System.out.println(data.getStr());
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
             }
         }).start();
+
     }
 
     public void changeVip(){

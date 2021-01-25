@@ -83,7 +83,6 @@ public class ServerSession implements Runnable{
                         Map.Entry<Boolean,int[][][]> resMat = SI.showMap(this.name);
                         connection.showMap(resMat.getValue(),resMat.getKey());
                         break;
-                    default:
 
                     case 7:
                         SI.changeVip(this.name);
@@ -93,18 +92,21 @@ public class ServerSession implements Runnable{
                         new Thread(() -> {
                             while(true) {
                                 SI.waitInfected(this.name);
-                                connection.warningIsInfected();
+                                connection.warningIsInfected("Esteve com alguém infetado!!");
                             }
                         }).start();
                         break;
                     case 9:
                         SI.logout(this.name);
+                        connection.warningIsInfected("STOP");
+                        break;
+
+                    default:
                         break;
                 }
                 request=connection.receive();
                 tag = request.getTag();
             }
-            this.s.close();
         } catch (Exception ignored) { }
     }
 }

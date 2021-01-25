@@ -31,7 +31,7 @@ public class ClientController {
                     break;
 
                 case "0":
-                    //this.model.quit();
+                    this.model.quit();
                     break;
 
                 default:
@@ -127,6 +127,7 @@ public class ClientController {
 
                 case "0":
                     this.model.logout();
+
                     break;
 
                 default:
