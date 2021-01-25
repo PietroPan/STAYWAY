@@ -1,21 +1,21 @@
 package Data;
 
-import Data.Location;
-import Data.User;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
 public class Users {
     Map<String, User> users;//Map de utilizadores do sistema
     ReentrantReadWriteLock lock;
+    private Condition waitInfected;
 
     public Users(){
         this.users=new HashMap<>();
-        lock=new ReentrantReadWriteLock();
+        this.lock=new ReentrantReadWriteLock();
+        this.waitInfected=lock.writeLock().newCondition();
     }
 
 
@@ -51,5 +51,22 @@ public class Users {
             users.get(i).addContact(name);
         }
         lock.writeLock().unlock();
+    }
+
+    public void waitInfected(String name){//Espera até estar potencialmente infetado
+        try {
+            this.lock.writeLock().lock();
+            User u = users.get(name);
+            while (!u.isWarningInfected()) waitInfected.await();
+            u.setWarningInfected(false);
+            this.lock.writeLock().unlock();
+        } catch (InterruptedException e) {}
+    }
+
+    public void wakeInfected(Set<String> users){//Acorda todos os potencialmente infetados
+        this.lock.writeLock().lock();
+        for (String i : users) this.users.get(i).setWarningInfected(true);
+        this.waitInfected.signalAll();
+        this.lock.writeLock().unlock();
     }
 }

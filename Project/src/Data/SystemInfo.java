@@ -20,15 +20,10 @@ public class SystemInfo {
     public int login(String name,String pass){
         User u=users.get(name);
         int r;
-        /*if (u!=null && u.getPassword().equals(pass)){
-            r=0;
-
-        } else return 2;
-        if (u.isInfected()==true)*/
-            if (u==null||!u.getPassword().equals(pass)) r=0;
-            else if (u.isInfected()) r=1;
-            else r=2;
-            return r;
+        if (u==null||!u.getPassword().equals(pass)) r=0;
+        else if (u.isInfected()) r=1;
+        else r=2;
+        return r;
     }
 
     public boolean register(String name,String pass){
@@ -61,9 +56,6 @@ public class SystemInfo {
 
     public boolean waitForLocation(int x, int y){
         Location l=new Location(x,y);
-        //if (locationsMap.isAlreadyZero(l)) {//Se não estiver ninguem na localizacao
-        //    return false;
-        //}
         locationsMap.waitForLocation(l);//Fica a espera que localizacao fique vazia NEEDS IO
         return true;
     }
@@ -72,7 +64,7 @@ public class SystemInfo {
         User u = users.get(name);
         u.setInfected(true);
         locationsMap.updateInfected(u.getLocations());
-        locationsMap.wakeInfected(u.getContacts());
+        this.users.wakeInfected(u.getContacts());
     }
 
     public Map.Entry<Boolean,int[][][]> showMap(String name){
@@ -87,6 +79,6 @@ public class SystemInfo {
     }
 
     public void waitInfected(String name){
-        this.locationsMap.waitInfected(name);
+        this.users.waitInfected(name);
     }
 }

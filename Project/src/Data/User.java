@@ -9,6 +9,7 @@ public class User {
     private String password;
     private boolean isInfected;
     private boolean isVip;
+    private boolean warningInfected;
     private Location currentLocation;
     private Set<String> contacts;//Set com pessoas potencialmente infetadas
     private Set<Location> locations;//Set com localizacoes onde esta pessoa esteve
@@ -18,6 +19,7 @@ public class User {
         this.password=pass;
         this.isInfected=false;
         this.isVip=true;
+        this.warningInfected=false;
         this.currentLocation=loc;
         this.contacts=new HashSet<>();
         this.locations=new HashSet<>();
@@ -29,6 +31,7 @@ public class User {
         this.password=c.password;
         this.isInfected=c.isInfected;
         this.isVip=c.isVip;
+        this.warningInfected=false;
         this.currentLocation=c.currentLocation.clone();
         this.contacts=new HashSet<>(c.contacts);
         this.locations=c.locations.stream().map(Location::clone).collect(Collectors.toSet());
@@ -107,4 +110,12 @@ public class User {
     }
 
     public void changeVip(){this.isVip=!this.isVip;}
+
+    public boolean isWarningInfected() {
+        return warningInfected;
+    }
+
+    public void setWarningInfected(boolean warningInfected) {
+        this.warningInfected = warningInfected;
+    }
 }

@@ -106,7 +106,6 @@ public class TaggedConnectionServer extends TaggedConnection {
 
         try {
             int op = in.readInt();
-            System.out.println("Tag: "+op);
 
             switch (op) {
                 case 0:   // Login

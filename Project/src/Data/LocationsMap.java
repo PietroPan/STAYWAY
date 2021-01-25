@@ -1,20 +1,11 @@
 package Data;
 
-import Data.Location;
-import Data.LocationInfo;
-
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class LocationsMap {
     private LocationInfo[][] map; //Mapa 10 por 10
-    //private Map<Integer, Condition> conds; //Map de Condition para cada lugar no mapa (serve para avisar quando esta estiver vazia)
-    private Map<String,Condition> condsInf; //Map de Condition para cada Pessoa (serve para avisar pessoas que estiveram com infetado)
     private ReentrantReadWriteLock lock;
     private Condition waitLocation;
 
@@ -25,8 +16,6 @@ public class LocationsMap {
                 map[i][j]=new LocationInfo(i,j);
             }
         }
-        //conds = new HashMap<>();
-        condsInf = new HashMap<>();
         lock=new ReentrantReadWriteLock();
         waitLocation = lock.writeLock().newCondition();
     }
@@ -39,7 +28,6 @@ public class LocationsMap {
         LocationInfo oldML = map[oldL.getX()][oldL.getY()];
         oldML.removeCurrent();
         if (oldML.isEmpty()) { //se novo location tiver 0 pessoas avisa todos os threads á espera nessa location
-            //if (conds.containsKey((oldML.getX() * 10) + oldML.getY())) conds.get((oldML.getX() * 10) + oldML.getY()).signalAll();
             waitLocation.signalAll();
         }
         lock.writeLock().unlock();
@@ -69,62 +57,15 @@ public class LocationsMap {
     }
 
     public void waitForLocation(Location loc){//Esperar que location fique vazia
-        /*new Thread(() -> {
-            try {
-                this.lock.writeLock().lock();
-                int key = (loc.getX()*10)+loc.getY();//chave unica para cada localizacao
-                if (conds.containsKey(key)) conds.get(key).await();
-                else {
-                    conds.put(key, this.lock.writeLock().newCondition());
-                    conds.get(key).await();//espera que fique vazia (updateLocations)
-                }
-                out.writeInt(3);
-                out.writeInt(loc.getX());
-                out.writeInt(loc.getY());
-                out.flush();
+        try {
+            this.lock.writeLock().lock();
+            LocationInfo locI = map[loc.getX()][loc.getY()];
+            while (!locI.isEmpty()) waitLocation.await();
                 this.lock.writeLock().unlock();
-            } catch (InterruptedException | IOException e) {}
-        }).start();*/
-
-        //new Thread(() -> {
-            try {
-                this.lock.writeLock().lock();
-
-                LocationInfo locI = map[loc.getX()][loc.getY()];
-                while (!locI.isEmpty()) waitLocation.await();
-                //IO RESPONSE
-                this.lock.writeLock().unlock();
-
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
-        //}).start();
-        /* NOTE
-        Varios threads podem esperar pela mesma loc
-        Sol: Cliente tem lista de loc que esta a espera
-        Prob: while tem de verificar o estado de todas as loc da list e potencialmente enviar varias respostas
-         */
-    }
-
-    public void waitInfected(String name){//Espera até estar potencialmente infetado
-        //new Thread(()->{
-            try {
-                if (!condsInf.containsKey(name)) condsInf.put(name,lock.writeLock().newCondition());
-                this.lock.writeLock().lock();
-                condsInf.get(name).await();
-                this.lock.writeLock().unlock();
-            } catch (InterruptedException e) {}
-        //}).start();
-    }
-
-    public void wakeInfected(Set<String> users){//Acorda todos os potencialmente infetados
-        this.lock.writeLock().lock();
-        for (String i : users) {
-            condsInf.get(i).signalAll();
         }
-        this.lock.writeLock().unlock();
     }
-
     public boolean isAlreadyZero(Location loc){//Não fica a espera que loc fique vazia
         lock.readLock().lock();
         try {
@@ -140,7 +81,6 @@ public class LocationsMap {
             int [][][] res = new int[2][10][10];
             for (int i=0;i<10;i++){
                 for (int j=0;j<10;j++){
-                    //out.writeInt(map[i][j].getCurrentPeople());
                     res[0][i][j] = map[i][j].getTotalPeople();
                     res[1][i][j] = map[i][j].getInfectedPeople();
                 }

@@ -29,7 +29,6 @@ public class TaggedConnectionClient extends TaggedConnection {
 
 
     public void register(String name,String pass) {
-        System.out.println("vou escrever no socket");
         try {
             writeLock.lock();
             out.writeInt(1); //Pedido com tag register
@@ -177,45 +176,4 @@ public class TaggedConnectionClient extends TaggedConnection {
             readLock.unlock();
         }
     }
-    /*
-        switch (in.readInt()) {
-            case 0://Resposta recebida com tag 0
-                if (in.readBoolean()) {
-                    this.name = (in.readUTF());
-                    System.out.println("Welcome " + this.name);
-                            } else System.out.println("Name or Password are incorrect");
-                            break;
-                        case 1://Resposta recebida com tag 1
-                            if (in.readBoolean()) {
-                                this.name = (in.readUTF());
-                                System.out.println("Welcome " + this.name);
-                            } else System.out.println("Name is already in use");
-                            break;
-                        case 2://Resposta recebida com tag 2
-                            System.out.println("Há " + in.readInt() + " pessoas na localização indicada");
-                            break;
-                        case 3://Resposta recebida com tag 3
-                            System.out.println("Location ("+in.readInt()+","+in.readInt()+") is available!!");
-                            break;
-                        case 4://Resposta recebida com tag 4
-                            System.out.println("Someone you've been with has been infected!!!");
-                            break;
-                        case 5://Resposta recebida com tag 5
-                            if (!in.readBoolean()) System.out.println("You don't have permission");
-                            else {
-                                for (int i=0;i<10;i++){
-                                    for (int j=0;j<10;j++){
-                                        //System.out.println("("+i+","+j+") Current People: "+in.readInt());
-                                        System.out.println("("+i+","+j+") Total People: "+in.readInt());
-                                        System.out.println("("+i+","+j+") Infected People: "+in.readInt());
-                                    }
-                                }
-                            }
-                            break;
-                    }
-                }
-            } catch (IOException e){}
-        }).start();
-    } */
-
 }

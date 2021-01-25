@@ -101,7 +101,6 @@ public class ClientModel {
     public void someoneWasInfected () {
         new Thread (() -> {
             while (true) {
-                System.out.println("Preso");
                 try {
                     ResponseString data = (ResponseString) dm.receive(5);
                     System.out.println(data.getStr());
