@@ -15,7 +15,7 @@ public class ClientModel {
 
     //////////////////////////// Pedidos Cliente //////////////////////////////
 
-    public boolean login(String username, String password) throws ExceptionIncorretLogin, IOException, InterruptedException, ExceptionIsInfected {
+    public boolean login(String username, String password) throws ExceptionIncorretLogin, IOException, InterruptedException, ExceptionIsInfected, ExceptionIsLogedIn {
         int success = 0;
         dm.login(username, password);
         ResponseInt data = (ResponseInt) dm.receive(0);
@@ -24,6 +24,7 @@ public class ClientModel {
         if (success==0) {
             throw new ExceptionIncorretLogin("Username ou Password errados.");
         } else if (success==1) throw new ExceptionIsInfected("Está infetado! Sistema Bloqueado");
+        else if (success==2) throw new ExceptionIsLogedIn("Utilizador já tem sessão iniciada");
         else return true;
     }
 
@@ -120,6 +121,16 @@ public class ClientModel {
     public void waitInfected(){
         new Thread(() ->{
             dm.waitInfected();
+        }).start();
+    }
+
+    public void logout(){
+        dm.logout();
+    }
+
+    public void quit(){
+        new Thread(()->{
+            dm.quit();
         }).start();
     }
 

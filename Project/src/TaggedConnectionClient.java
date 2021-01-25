@@ -129,6 +129,30 @@ public class TaggedConnectionClient extends TaggedConnection {
         }
     }
 
+    public void logout(){
+        try{
+            writeLock.lock();
+            out.writeInt(9);
+            out.flush();
+            writeLock.unlock();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void quit(){
+        try{
+            writeLock.lock();
+            out.writeInt(10);
+            out.flush();
+            writeLock.unlock();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 
     public Response receive() throws IOException {
         Response res = null;

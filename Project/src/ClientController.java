@@ -31,6 +31,7 @@ public class ClientController {
                     break;
 
                 case "0":
+                    //this.model.quit();
                     break;
 
                 default:
@@ -86,10 +87,9 @@ public class ClientController {
         String opcao = "";
         int x, y;
 
-        while (!opcao.equals("0")) {
+        while (!opcao.equals("0")&&!opcao.equals("4")) {
             this.view.menuCliente();
             opcao = in.nextLine();
-            System.out.println(opcao);
 
             switch (opcao) {
                 case "1":
@@ -127,6 +127,7 @@ public class ClientController {
                     break;
 
                 case "0":
+                    this.model.logout();
                     break;
 
                 default:

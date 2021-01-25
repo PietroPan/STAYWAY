@@ -136,6 +136,12 @@ public class TaggedConnectionServer extends TaggedConnection {
                 case 8:
                     res = new ResponseString(8, null);
                     break;
+                case 9:
+                    res = new ResponseString(9,null);
+                    break;
+                case 10:
+                    res = new ResponseString(10,null);
+                    break;
 
                 default:
                     break;

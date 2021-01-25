@@ -126,4 +126,7 @@ public class Demultiplexer implements AutoCloseable {
 
     public void waitInfected() {connection.waitInfected();}
 
+    public void logout() {connection.logout();}
+
+    public void quit() {connection.quit();}
 }

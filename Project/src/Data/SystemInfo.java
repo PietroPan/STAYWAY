@@ -22,7 +22,11 @@ public class SystemInfo {
         int r;
         if (u==null||!u.getPassword().equals(pass)) r=0;
         else if (u.isInfected()) r=1;
-        else r=2;
+        else if (u.isLogedIn()) r=2;
+        else {
+            r=3;
+            u.setLogedIn(true);
+        }
         return r;
     }
 
@@ -81,4 +85,6 @@ public class SystemInfo {
     public void waitInfected(String name){
         this.users.waitInfected(name);
     }
+
+    public void logout(String name) {this.users.get(name).setLogedIn(false);}
 }

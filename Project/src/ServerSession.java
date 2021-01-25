@@ -9,11 +9,13 @@ import java.net.Socket;
 import java.util.Map;
 
 public class ServerSession implements Runnable{
+    private Socket s;
     private final TaggedConnectionServer connection; // hmmm deixar o final ou mudar o try-with-resources
     private SystemInfo SI;
     private String name;
 
     public ServerSession(Socket s, SystemInfo SI) throws IOException {
+        this.s=s;
         this.connection = new TaggedConnectionServer(s);
         this.SI=SI;
     }
@@ -26,10 +28,9 @@ public class ServerSession implements Runnable{
     @Override
     public void run() {
         try (this.connection) {
-            while (true) {
-                Response request = connection.receive();
-                int tag = request.getTag();
-
+            Response request = connection.receive();
+            int tag = request.getTag();
+            while (tag!=10) {
                 switch(tag) {
                     case 0:
                         ResponsePairString par = (ResponsePairString) request;
@@ -96,14 +97,14 @@ public class ServerSession implements Runnable{
                             }
                         }).start();
                         break;
-
-
-
-
-
-                        
+                    case 9:
+                        SI.logout(this.name);
+                        break;
                 }
+                request=connection.receive();
+                tag = request.getTag();
             }
+            this.s.close();
         } catch (Exception ignored) { }
     }
 }
