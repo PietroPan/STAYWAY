@@ -83,7 +83,6 @@ public class ClientController {
 
     public void menuPrincipal() {
         this.model.someoneWasInfected();
-        this.model.waitInfected();
         String opcao = "";
         int x, y;
 

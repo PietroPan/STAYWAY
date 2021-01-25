@@ -101,6 +101,7 @@ public class ClientModel {
 
     public void someoneWasInfected () {
         new Thread (() -> {
+            dm.waitInfected();
             while (true) {
                 try {
                     ResponseString data = (ResponseString) dm.receive(5);
@@ -118,11 +119,13 @@ public class ClientModel {
         }).start();
     }
 
+    /*
     public void waitInfected(){
         new Thread(() ->{
             dm.waitInfected();
         }).start();
     }
+    */
 
     public void logout(){
         dm.logout();
