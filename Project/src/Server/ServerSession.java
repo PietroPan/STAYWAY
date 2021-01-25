@@ -12,19 +12,12 @@ import java.net.Socket;
 import java.util.Map;
 
 public class ServerSession implements Runnable{
-    private Socket s;
     private final TaggedConnectionServer connection; // hmmm deixar o final ou mudar o try-with-resources
     private SystemInfo SI;
     private String name;
 
     public ServerSession(Socket s, SystemInfo SI) throws IOException {
-        this.s=s;
         this.connection = new TaggedConnectionServer(s);
-        this.SI=SI;
-    }
-
-    public ServerSession(TaggedConnectionServer tc, SystemInfo SI) throws IOException {
-        this.connection = tc;
         this.SI=SI;
     }
 
