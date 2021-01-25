@@ -125,22 +125,22 @@ public class TaggedConnectionServer extends TaggedConnection {
                     res = new ResponsePair(4,in.readInt(), in.readInt());
                     break;
                 case 5:   //Infected
-                    res = new ResponseString(5, null);//Não precisa de nada
+                    res = new Response(5);//Não precisa de nada
                     break;
                 case 6:   //Map
-                    res = new ResponseString(6, null);//Não precisa de nada
+                    res = new Response(6);//Não precisa de nada
                     break;
                 case 7:
-                    res = new ResponseString(7,null);
+                    res = new Response(7);
                     break;
                 case 8:
-                    res = new ResponseString(8, null);
+                    res = new Response(8);
                     break;
                 case 9:
-                    res = new ResponseString(9,null);
+                    res = new Response(9);
                     break;
                 case 10:
-                    res = new ResponseString(10,null);
+                    res = new Response(10);
                     break;
 
                 default:

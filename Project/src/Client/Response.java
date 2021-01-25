@@ -1,7 +1,15 @@
 package Client;
 
-public abstract class Response {
+public class Response {
     private int tag;
+
+    public Response(){
+        this.tag=-1;
+    }
+
+    public Response(int tag){
+        this.tag=tag;
+    }
 
     public int getTag() {
         return tag;

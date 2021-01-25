@@ -21,6 +21,7 @@ public abstract class TaggedConnection implements AutoCloseable {
     }
 
     public void close() throws IOException {
+        System.out.println("SocketClosed");
         socket.close();
     }
 

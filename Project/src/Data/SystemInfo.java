@@ -86,9 +86,8 @@ public class SystemInfo {
         return this.users.waitInfected(name);
     }
 
-    public void logout(String name) {this.users.get(name).setLogedIn(false);}
-
-    public void stopWait() {
+    public void logout(String name) {
+        this.users.get(name).setLogedIn(false);
         this.users.stopWait();
     }
 }

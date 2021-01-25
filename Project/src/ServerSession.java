@@ -27,6 +27,7 @@ public class ServerSession implements Runnable{
 
     @Override
     public void run() {
+        System.out.println("ThreadStarted");
         try (this.connection) {
             Response request = connection.receive();
             int tag = request.getTag();
@@ -78,7 +79,6 @@ public class ServerSession implements Runnable{
                     case 5:
                         SI.isInfected(this.name);
                         SI.logout(this.name);
-                        SI.stopWait();
                         connection.warningIsInfected("STOP");
                         break;
 
@@ -93,13 +93,11 @@ public class ServerSession implements Runnable{
 
                     case 8:
                         new Thread(() -> {
-                            System.out.println("Entra no thread");
                             boolean b2=true;
                             while(b2) {
                                 b2=SI.waitInfected(this.name);
                                 if (b2) connection.warningIsInfected("Esteve com alguém infetado!!");
                             }
-                            System.out.println("Sai do thread");
                         }).start();
                         break;
 
@@ -115,5 +113,6 @@ public class ServerSession implements Runnable{
                 tag = request.getTag();
             }
         } catch (Exception ignored) { }
+        System.out.println("ThreadFinished");
     }
 }
