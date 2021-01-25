@@ -66,18 +66,10 @@ public class LocationsMap {
                 e.printStackTrace();
         }
     }
-    public boolean isAlreadyZero(Location loc){//Não fica a espera que loc fique vazia
-        lock.readLock().lock();
-        try {
-            return (map[loc.getX()][loc.getY()].getCurrentPeople() == 0);
-        } finally {
-            lock.readLock().unlock();
-        }
-    }
 
     public int[][][] readMap() {//Manda toda a informação do map para client
         try {
-            lock.writeLock().lock();
+            lock.readLock().lock();
             int [][][] res = new int[2][10][10];
             for (int i=0;i<10;i++){
                 for (int j=0;j<10;j++){
@@ -87,7 +79,7 @@ public class LocationsMap {
             }
             return res;
         } finally {
-            lock.writeLock().unlock();
+            lock.readLock().unlock();
         }
     }
 }
