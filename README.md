@@ -2,7 +2,7 @@
 
 Project developed for the discipline of Distributed Systems of the master's degree in Computer Software Engineering at the University of Minho.
 
-Simulation of a aplication that tracks the contacts a user had and warns them of potencial being in contact with someone that has tested positive for Covid19, written in java
+Simulation of a aplication that tracks the contacts a user had and warns them of potencial being in contact with someone that has tested positive for Covid19 written in Java
 
 # Contributing
 
